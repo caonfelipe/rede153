@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agendar reunião</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ECEEF3; --card: #FFFFFF; --side: #F6F7FA; --fg: #151926; --muted: #5B6277; --line: #DCDFE8;
+    --accent: #3144CF; --accent-fg: #fff; --accent-soft: #E3E7FF; --ok: #18723F; --err: #C0392B;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B0D14; --card: #141824; --side: #10131C; --fg: #E8EAF2; --muted: #9AA1B5; --line: #262B3A;
+      --accent: #5468FF; --accent-fg: #fff; --accent-soft: #1D2550; --ok: #6FD49B; --err: #FF8F8F;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; min-height: 100vh; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 40px 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; display: grid; grid-template-columns: 280px 1fr; overflow: hidden; box-shadow: 0 10px 40px rgba(10, 14, 30, .08); }
+  .side { background: var(--side); border-right: 1px solid var(--line); padding: 28px 24px; }
+  .av { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: var(--accent); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 22px; }
+  .owner { color: var(--muted); font-size: 13.5px; margin: 16px 0 2px; }
+  h1 { font-size: 21px; line-height: 1.25; margin: 0 0 10px; }
+  .desc { color: var(--muted); font-size: 14px; margin: 0 0 18px; white-space: pre-line; }
+  .meta { display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--muted); }
+  .meta span { display: flex; gap: 8px; align-items: center; }
+  .meta svg { flex: 0 0 auto; }
+  .main { padding: 28px; min-width: 0; }
+  h2 { font-size: 16px; margin: 0 0 16px; }
+  .pick { display: grid; grid-template-columns: 1fr 200px; gap: 28px; }
+  .mhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .mhead b { font-size: 15px; text-transform: capitalize; }
+  .nav { background: none; border: 1px solid var(--line); color: var(--fg); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-size: 16px; }
+  .nav:disabled { opacity: .3; cursor: default; }
+  .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+  .grid .wd { font-size: 11px; font-weight: 600; color: var(--muted); padding: 4px 0; }
+  .day { aspect-ratio: 1; max-width: 46px; width: 100%; margin: 0 auto; border-radius: 50%; border: 0; background: none; color: var(--muted); font: inherit; font-size: 14px; opacity: .45; }
+  .day.av2 { background: var(--accent-soft); color: var(--accent); font-weight: 600; opacity: 1; cursor: pointer; }
+  .day.av2:hover { filter: brightness(.95); }
+  .day.sel { background: var(--accent); color: var(--accent-fg); }
+  .tz { font-size: 12px; color: var(--muted); margin-top: 14px; }
+  .slots h3 { font-size: 14px; margin: 0 0 10px; text-transform: capitalize; }
+  .slist { display: flex; flex-direction: column; gap: 8px; max-height: 360px; overflow: auto; padding-right: 2px; }
+  .slot { border: 1px solid var(--accent); color: var(--accent); background: none; border-radius: 8px; padding: 10px; font: 600 14px Inter, system-ui, sans-serif; cursor: pointer; }
+  .slot:hover { background: var(--accent-soft); }
+  .muted { color: var(--muted); font-size: 14px; }
+  form { display: flex; flex-direction: column; gap: 14px; max-width: 420px; }
+  label { display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; font-weight: 600; }
+  label small { font-weight: 400; color: var(--muted); }
+  input, textarea { font: inherit; color: var(--fg); background: var(--side); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+  input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+  textarea { min-height: 80px; resize: vertical; }
+  .btn { background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 8px; padding: 12px 16px; font: 600 15px Inter, system-ui, sans-serif; cursor: pointer; }
+  .btn:disabled { opacity: .6; cursor: progress; }
+  .link { background: none; border: 0; color: var(--accent); font: inherit; font-size: 14px; cursor: pointer; padding: 0; text-align: left; }
+  .chosen { background: var(--accent-soft); color: var(--fg); border-radius: 10px; padding: 12px 14px; font-weight: 600; margin-bottom: 16px; max-width: 420px; }
+  .err { color: var(--err); font-size: 14px; min-height: 1em; margin: 0; }
+  .done { text-align: center; padding: 30px 10px; }
+  .done .ic { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; margin: 0 auto 14px; }
+  .done h2 { font-size: 20px; margin-bottom: 6px; }
+  .foot { text-align: center; color: var(--muted); font-size: 12px; margin-top: 18px; }
+  .foot b { color: var(--fg); }
+  .center { padding: 60px 20px; text-align: center; }
+  @media (max-width: 760px) {
+    .wrap { padding: 16px; }
+    .card { grid-template-columns: 1fr; }
+    .side { border-right: 0; border-bottom: 1px solid var(--line); padding: 22px 20px; }
+    .main { padding: 22px 20px; }
+    .pick { grid-template-columns: 1fr; gap: 22px; }
+    .slist { max-height: none; display: grid; grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap"><div id="app" class="card"><div class="center muted" style="grid-column:1/-1">Carregando agenda...</div></div>
+<p class="foot">Agendamento por <b>Rede 153</b></p></div>
+<script>
+(() => {
+  const SB = 'https://fdethpkbgdrtaswfyghf.supabase.co', KEY = 'sb_publishable_EoEuDgwAksUiR0uenSU-_w_Xv99EY4h';
+  const TZ = 'America/Sao_Paulo';
+  const app = document.getElementById('app');
+  const slug = new URLSearchParams(location.search).get('u') || '';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const hdr = { apikey: KEY, Authorization: 'Bearer ' + KEY, 'content-type': 'application/json' };
+  const dayKey = t => new Date(t).toLocaleDateString('en-CA', { timeZone: TZ });
+  const hm = t => new Date(t).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: TZ });
+  const longDay = t => new Date(t).toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', timeZone: TZ });
+  const ICON_CLOCK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  const ICON_VIDEO = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/></svg>';
+  const ICON_CHECK = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 5 5 9-10"/></svg>';
+
+  let page = null, byDay = {}, month = null, selDay = '', selAt = 0;
+
+  async function load() {
+    if (!/^[a-z0-9-]{3,40}$/.test(slug)) return fail('Link de agendamento inválido.');
+    try {
+      const r = await fetch(`${SB}/rest/v1/booking_pages?slug=eq.${slug}&select=slug,data,slots`, { headers: hdr });
+      const rows = await r.json();
+      if (!r.ok || !rows.length) return fail('Agenda não encontrada. Confira o link.');
+      page = rows[0];
+    } catch (e) { return fail('Não consegui carregar a agenda. Verifique sua internet e recarregue a página.'); }
+    const d = page.data || {};
+    document.title = 'Agendar com ' + (d.name || 'Rede 153');
+    byDay = {};
+    for (const t of (page.slots || []).filter(t => t > Date.now()).sort((a, b) => a - b)) (byDay[dayKey(t)] = byDay[dayKey(t)] || []).push(t);
+    const first = Object.keys(byDay).sort()[0];
+    selDay = first || '';
+    month = (first || dayKey(Date.now())).slice(0, 7);
+    render();
+  }
+  function fail(msg) { app.innerHTML = `<div class="center muted" style="grid-column:1/-1">${esc(msg)}</div>`; }
+
+  function side() {
+    const d = page.data || {};
+    const ini = (d.name || '?').split(/\s+/).filter(Boolean).map(p => p[0]).slice(0, 2).join('').toUpperCase();
+    return `<aside class="side">
+      ${d.photo ? `<img class="av" src="${esc(d.photo)}" alt="" onerror="this.outerHTML='<div class=av>${esc(ini)}</div>'">` : `<div class="av">${esc(ini)}</div>`}
+      <p class="owner">${esc(d.name)}</p>
+      <h1>${esc(d.title || 'Agenda')}</h1>
+      ${d.desc ? `<p class="desc">${esc(d.desc)}</p>` : ''}
+      <div class="meta"><span>${ICON_CLOCK}${esc(d.duration || 30)} min</span><span>${ICON_VIDEO}Google Meet, link enviado no WhatsApp</span></div>
+    </aside>`;
+  }
+
+  function render() {
+    const d = page.data || {};
+    if (d.on === false || !Object.keys(byDay).length) {
+      app.innerHTML = side() + `<section class="main"><h2>Escolha um dia</h2><p class="muted">${d.on === false ? 'Esta agenda está fechada no momento.' : 'Não há horários livres nos próximos dias. Tente de novo mais tarde.'}</p></section>`;
+      return;
+    }
+    app.innerHTML = side() + `<section class="main">${selAt ? formHtml() : pickHtml()}</section>`;
+    bind();
+  }
+
+  function pickHtml() {
+    const [y, m] = month.split('-').map(Number);
+    const first = new Date(Date.UTC(y, m - 1, 1, 12)), days = new Date(Date.UTC(y, m, 0, 12)).getUTCDate();
+    const lead = first.getUTCDay();
+    const label = first.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    const months = Object.keys(byDay).map(k => k.slice(0, 7));
+    const minM = months.reduce((a, b) => a < b ? a : b), maxM = months.reduce((a, b) => a > b ? a : b);
+    let cells = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(w => `<div class="wd">${w}</div>`).join('') + '<div></div>'.repeat(lead);
+    for (let i = 1; i <= days; i++) {
+      const k = `${month}-${String(i).padStart(2, '0')}`;
+      cells += byDay[k] ? `<button type="button" class="day av2${k === selDay ? ' sel' : ''}" data-day="${k}" aria-label="Dia ${i}">${i}</button>` : `<button type="button" class="day" disabled>${i}</button>`;
+    }
+    const sl = selDay && byDay[selDay];
+    return `<h2>Escolha um dia e horário</h2><div class="pick">
+      <div><div class="mhead"><button type="button" class="nav" data-m="-1" aria-label="Mês anterior" ${month <= minM ? 'disabled' : ''}>‹</button><b>${esc(label)}</b><button type="button" class="nav" data-m="1" aria-label="Próximo mês" ${month >= maxM ? 'disabled' : ''}>›</button></div>
+        <div class="grid">${cells}</div><p class="tz">Horários de Brasília</p></div>
+      <div class="slots">${sl ? `<h3>${esc(longDay(sl[0]))}</h3><div class="slist">${sl.map(t => `<button type="button" class="slot" data-at="${t}">${hm(t)}</button>`).join('')}</div>` : '<p class="muted">Escolha um dia no calendário.</p>'}</div>
+    </div>`;
+  }
+
+  function formHtml() {
+    return `<button type="button" class="link" data-back style="margin-bottom:14px">‹ Trocar horário</button>
+      <div class="chosen">${esc(longDay(selAt))}, às ${hm(selAt)}</div>
+      <form id="f" novalidate>
+        <label>Seu nome<input name="name" autocomplete="name" required maxlength="80"></label>
+        <label>WhatsApp <small>com DDD. O link da reunião chega por aqui.</small><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(48) 99999-0000" required></label>
+        <label>E-mail <small>para receber o convite na agenda</small><input name="email" type="email" autocomplete="email"></label>
+        <label>Quer adiantar algo? <small>opcional</small><textarea name="note" maxlength="500"></textarea></label>
+        <p class="err" id="err"></p>
+        <button class="btn" type="submit">Confirmar agendamento</button>
+      </form>`;
+  }
+
+  function bind() {
+    app.querySelectorAll('[data-day]').forEach(b => b.onclick = () => { selDay = b.dataset.day; render(); });
+    app.querySelectorAll('[data-m]').forEach(b => b.onclick = () => {
+      const [y, m] = month.split('-').map(Number), d = new Date(Date.UTC(y, m - 1 + Number(b.dataset.m), 1));
+      month = d.toISOString().slice(0, 7);
+      selDay = Object.keys(byDay).sort().find(k => k.startsWith(month)) || '';
+      render();
+    });
+    app.querySelectorAll('[data-at]').forEach(b => b.onclick = () => { selAt = Number(b.dataset.at); render(); });
+    const back = app.querySelector('[data-back]');
+    if (back) back.onclick = () => { selAt = 0; render(); };
+    const f = document.getElementById('f');
+    if (f) { f.elements.name.focus(); f.onsubmit = submit; }
+  }
+
+  async function submit(e) {
+    e.preventDefault();
+    const f = e.target, err = document.getElementById('err'), btn = f.querySelector('.btn');
+    const v = { name: f.elements.name.value.trim(), phone: f.elements.phone.value.replace(/\D/g, ''), email: f.elements.email.value.trim(), note: f.elements.note.value.trim() };
+    if (v.name.length < 2) return err.textContent = 'Informe seu nome.';
+    if (v.phone.length < 10 || v.phone.length > 13) return err.textContent = 'Informe seu WhatsApp com DDD.';
+    if (v.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.email)) return err.textContent = 'Confira o e-mail.';
+    err.textContent = ''; btn.disabled = true; btn.textContent = 'Agendando...';
+    try {
+      const r = await fetch(`${SB}/rest/v1/rpc/book`, { method: 'POST', headers: hdr,
+        body: JSON.stringify({ p_slug: slug, p_at: selAt, p_name: v.name, p_email: v.email, p_phone: v.phone, p_note: v.note }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        err.textContent = j.message || 'Não consegui agendar. Tente de novo.';
+        btn.disabled = false; btn.textContent = 'Confirmar agendamento';
+        if (/ocupado/.test(j.message || '')) { page.slots = (page.slots || []).filter(t => t !== selAt); }
+        return;
+      }
+      done(j, v);
+    } catch (x) {
+      err.textContent = 'Sem conexão. Tente de novo.';
+      btn.disabled = false; btn.textContent = 'Confirmar agendamento';
+    }
+  }
+
+  function done(id, v) {
+    const when = `${longDay(selAt)}, às ${hm(selAt)}`;
+    const main = app.querySelector('.main');
+    const paint = (title, txt, extra = '') => main.innerHTML = `<div class="done"><div class="ic">${ICON_CHECK}</div><h2>${esc(title)}</h2><p class="muted">${txt}</p>${extra}</div>`;
+    paint('Agendamento recebido', `${esc(when)}.<br>Em instantes você recebe a confirmação com o link da reunião no WhatsApp${v.email ? ' e o convite no e-mail' : ''}.`);
+    // Acompanha a confirmação (a reunião é criada pela agenda do anfitrião)
+    let n = 0;
+    const poll = async () => {
+      if (++n > 40) return;
+      try {
+        const r = await fetch(`${SB}/rest/v1/rpc/booking_status`, { method: 'POST', headers: hdr, body: JSON.stringify({ p_id: id }) });
+        const s = await r.json();
+        if (s && s.status === 'confirmado') return paint('Reunião confirmada', `${esc(when)}.<br>O link também foi enviado no seu WhatsApp.`, s.link ? `<p><a class="btn" style="display:inline-block;text-decoration:none;margin-top:8px" href="${esc(s.link)}" target="_blank" rel="noopener">Abrir o link do Google Meet</a></p>` : '');
+        if (s && s.status === 'conflito') return paint('Horário indisponível', 'Esse horário acabou de ser ocupado. Você vai receber uma mensagem no WhatsApp para escolher outro.');
+      } catch (e) {}
+      setTimeout(poll, 4000);
+    };
+    setTimeout(poll, 4000);
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>
