@@ -84,7 +84,9 @@
   const SB = 'https://fdethpkbgdrtaswfyghf.supabase.co', KEY = 'sb_publishable_EoEuDgwAksUiR0uenSU-_w_Xv99EY4h';
   const TZ = 'America/Sao_Paulo';
   const app = document.getElementById('app');
-  const slug = new URLSearchParams(location.search).get('u') || '';
+  // Link curto: rede153.com/felipe-caon (o GitHub Pages serve esta página como 404.html); link antigo: agendar.html?u=felipe-caon
+  const pathSlug = (location.pathname.split('/').filter(Boolean).pop() || '').toLowerCase();
+  const slug = new URLSearchParams(location.search).get('u') || (/^[a-z0-9-]{3,40}$/.test(pathSlug) && pathSlug !== 'rede153' ? pathSlug : '');
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const hdr = { apikey: KEY, Authorization: 'Bearer ' + KEY, 'content-type': 'application/json' };
   const dayKey = t => new Date(t).toLocaleDateString('en-CA', { timeZone: TZ });
