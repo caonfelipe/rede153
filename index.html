@@ -1,5 +1,729 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Rede 153</title>
-<style>:root{--bg:#ECEEF3;--fg:#151926;--muted:#5B6277}@media (prefers-color-scheme:dark){:root{--bg:#0B0D14;--fg:#E8EAF2;--muted:#9AA1B5}}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif;padding:16px;text-align:center}p{color:var(--muted)}</style></head>
-<body><div><h1>Rede 153</h1><p>Funil de social selling.</p></div></body></html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rede 153 | Social selling no Instagram</title>
+<meta name="description" content="Quem engaja no seu Instagram entra num funil, recebe a abordagem certa na DM e chega na reunião lembrado. A mesma rede. O mesmo mar. Uma direção diferente.">
+<meta property="og:title" content="Rede 153 | Seu Instagram vira agenda">
+<meta property="og:description" content="Captura quem engaja no seu Instagram, aborda com segurança na DM, agenda com Google Meet e lembra a reunião sozinho.">
+<meta property="og:url" content="https://rede153.com/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0C0C0D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C0C0D; --bg2:#121214; --card:#18181B; --line:#2A2A2F; --line2:#3A3A40;
+  --fg:#F4F2EE; --muted:#A3A1A8; --dim:#6E6C73;
+  --brand:#5B5CF0; --brand2:#7072F5; --gold:#8B8DF9; --gold2:#A5A7FB; --goldbg:rgba(99,102,241,.14);
+  --green:#7FC79A; --greenbg:rgba(127,199,154,.10); --red:#E2837C; --redbg:rgba(226,131,124,.08);
+  --r:16px; --max:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 "Noto Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+section{padding:96px 0;border-top:1px solid #1C1C20}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 14px}
+h1,h2,h3{margin:0;line-height:1.15;letter-spacing:-.015em}
+h1{font-size:clamp(36px,5.6vw,64px);font-weight:800}
+h2{font-size:clamp(28px,3.8vw,44px);font-weight:800;max-width:860px}
+h3{font-size:18px;font-weight:700}
+.lead{font-size:clamp(17px,1.6vw,20px);color:var(--muted);max-width:720px;margin:18px 0 0}
+.gold{color:var(--gold)}
+.muted{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;transition:transform .15s,background .15s,border-color .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.primary:hover{background:var(--brand2)}
+.btn.ghost{border:1px solid var(--line2);color:var(--fg)}
+.btn.ghost:hover{border-color:var(--gold)}
+.btn svg{width:18px;height:18px}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 26px 26px 30px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold)}
+.card.red::before{background:var(--red)} .card.green::before{background:var(--green)} .card.plain::before{display:none}
+.card h3{margin-bottom:10px}
+.card p{margin:0;color:var(--muted);font-size:15px}
+.quote{border-left:3px solid var(--gold);padding:4px 0 4px 22px;font-size:clamp(20px,2.4vw,26px);font-weight:700;margin:44px 0 0;max-width:900px}
+.mt{margin-top:44px}
+
+/* topo */
+.nav{position:sticky;top:0;z-index:20;background:rgba(12,12,13,.82);backdrop-filter:blur(12px);border-bottom:1px solid #1C1C20}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;text-decoration:none;font-size:18px}
+.logo b{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--brand);color:#fff;font-size:13px;letter-spacing:-.02em}
+.nav .btn{padding:10px 18px;font-size:14px}
+.nav nav{display:flex;gap:26px;font-size:14px;color:var(--muted)}
+.nav nav a{text-decoration:none}.nav nav a:hover{color:var(--fg)}
+
+/* hero */
+.hero{padding:88px 0 72px;border-top:0;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-220px;top:-120px;width:640px;height:640px;border-radius:50%;border:2px solid rgba(99,102,241,.45);border-left-color:transparent;border-bottom-color:transparent;transform:rotate(18deg);pointer-events:none}
+.hero .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.hero .note{margin-top:16px;font-size:14px;color:var(--dim)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
+.chip{border:1px solid var(--line2);border-radius:999px;padding:8px 14px;font-size:13px;color:var(--muted);background:var(--bg2)}
+
+/* demonstração do produto */
+.shot{margin-top:56px;background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 40px 120px rgba(0,0,0,.55)}
+.shot .bar{display:flex;align-items:center;gap:7px;padding:4px 6px 12px}
+.shot .bar i{width:10px;height:10px;border-radius:50%;background:#2E2E33}
+.shot .bar span{margin-left:12px;font-size:12px;color:var(--dim)}
+.board{display:grid;grid-template-columns:repeat(6,minmax(150px,1fr));gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;scrollbar-color:#3A3A40 transparent}
+.board::-webkit-scrollbar{height:6px}.board::-webkit-scrollbar-thumb{background:#3A3A40;border-radius:6px}.board::-webkit-scrollbar-track{background:transparent}
+.col{background:#141416;border:1px solid #232327;border-radius:12px;padding:10px;min-height:250px}
+.col h4{margin:0 0 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between}
+.col h4 em{font-style:normal;color:var(--gold)}
+.lc{background:var(--card);border:1px solid #2A2A30;border-radius:10px;padding:9px 10px;margin-bottom:8px;font-size:12px}
+.lc .u{display:flex;align-items:center;gap:8px;font-weight:600}
+.lc .av{width:22px;height:22px;border-radius:50%;flex:none}
+.lc .s{color:var(--dim);margin-top:5px;font-size:11px}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;margin-top:6px}
+.tag.ok{background:var(--greenbg);color:var(--green)} .tag.go{background:var(--goldbg);color:var(--gold)}
+
+/* espelho */
+.mirror{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start;margin-top:44px}
+.chaos{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.chaos div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px dashed #2A2A2F;font-size:15px}
+.chaos div:last-child{border-bottom:0}
+.chaos span:last-child{color:var(--red);font-weight:600;white-space:nowrap}
+
+/* virada */
+.turn{display:grid;grid-template-columns:1fr auto 1fr;gap:28px;align-items:center;margin-top:48px}
+.turn .side{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:30px}
+.turn .side small{display:block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+.turn .side p{margin:0;font-size:clamp(20px,2.2vw,25px);font-weight:700;line-height:1.3}
+.turn .arrow{width:64px;height:64px;color:var(--gold)}
+
+/* fluxo */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:48px;counter-reset:f}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;position:relative}
+.step .n{width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;margin-bottom:14px}
+.step h3{font-size:16px;margin-bottom:8px}
+.step p{margin:0;color:var(--muted);font-size:14px}
+
+/* recursos */
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.feat .card svg{width:28px;height:28px;color:var(--gold);margin-bottom:14px}
+
+/* vitrine (WhatsApp e agenda) */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px}
+.mock{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:22px}
+.mock h3{font-size:15px;margin-bottom:4px}
+.mock .cap{font-size:13px;color:var(--dim);margin:0 0 16px}
+.wa{display:grid;grid-template-columns:1fr 210px;gap:12px}
+.chat{background:#0F1512;border:1px solid #1E2A24;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.bub{max-width:85%;padding:8px 11px;border-radius:10px;line-height:1.4}
+.bub.in{background:#1F2C26;align-self:flex-start}
+.bub.out{background:#1E4D3A;align-self:flex-end}
+.side153{background:var(--card);border:1px solid #2A2A30;border-radius:12px;padding:12px;font-size:12px}
+.side153 .t{display:flex;align-items:center;gap:7px;font-weight:700;margin-bottom:10px}
+.side153 .t b{background:var(--brand);color:#fff;border-radius:5px;font-size:9px;padding:2px 5px}
+.side153 label{display:block;color:var(--dim);font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin:9px 0 4px}
+.side153 .f{background:#111113;border:1px solid #2A2A30;border-radius:7px;padding:6px 8px}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.slots span{border:1px solid #33333A;border-radius:6px;text-align:center;padding:4px 0}
+.slots span.on{border-color:var(--gold);color:var(--gold)}
+.book{display:grid;grid-template-columns:150px 1fr;gap:14px}
+.prof{background:var(--card);border:1px solid #2A2A30;border-radius:12px;padding:14px;text-align:center;font-size:12px}
+.prof .ph{width:54px;height:54px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,#8B8DF9,#3B3DC4);display:grid;place-items:center;font-weight:800;color:#fff}
+.cal{background:var(--card);border:1px solid #2A2A30;border-radius:12px;padding:14px;font-size:12px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;margin:10px 0 12px}
+.days span{padding:5px 0;border-radius:6px;color:var(--dim)}
+.days span.a{color:var(--fg)} .days span.sel{background:var(--brand);color:#fff;font-weight:700}
+.rem{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.rem span{font-size:11px;background:var(--greenbg);color:var(--green);border-radius:999px;padding:3px 9px}
+
+/* vídeos */
+.reels{display:grid;grid-template-columns:repeat(2,minmax(0,400px));justify-content:center;gap:28px;margin-top:44px}
+.reel{margin:0;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.reel iframe{display:block;width:100%;height:680px;border:0;background:#fff}
+.reel figcaption{padding:14px;text-align:center;font-size:14px}
+.reel figcaption a{color:var(--gold);font-weight:700;text-decoration:none}
+
+/* 153 */
+.story{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+.num{font-size:clamp(120px,18vw,220px);font-weight:800;line-height:.9;letter-spacing:-.04em;background:linear-gradient(180deg,#B4B6FD,#4547D6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.num-say{margin-top:14px;color:var(--muted);font-size:15px}
+.verse{border-left:3px solid var(--gold);padding:6px 0 6px 22px;color:var(--muted);font-size:16px;margin:22px 0 0}
+.verse cite{display:block;margin-top:8px;font-style:normal;font-size:13px;color:var(--dim)}
+.motto{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:30px}
+.motto div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center}
+.motto b{display:block;font-size:18px}
+.motto span{font-size:13px;color:var(--muted)}
+
+/* fit */
+.fit ul{list-style:none;margin:14px 0 0;padding:0}
+.fit li{padding:9px 0 9px 28px;position:relative;color:var(--fg);font-size:15px;border-bottom:1px solid #222226}
+.fit li:last-child{border-bottom:0}
+.fit .green li::before{content:"";position:absolute;left:4px;top:15px;width:10px;height:10px;border-radius:50%;background:var(--green)}
+.fit .red li::before{content:"";position:absolute;left:4px;top:19px;width:11px;height:2px;background:var(--red)}
+
+/* prova */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:44px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.stat b{display:block;font-size:clamp(26px,3vw,34px);font-weight:800;color:var(--gold);line-height:1.1}
+.stat span{display:block;margin-top:8px;color:var(--muted);font-size:14px}
+.stat.hl{border-color:rgba(99,102,241,.5);background:linear-gradient(180deg,rgba(99,102,241,.12),var(--card))}
+
+/* ancoragem */
+.stack{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:12px 30px;margin-top:44px}
+.row{display:grid;grid-template-columns:1fr auto;gap:20px;padding:18px 0;border-bottom:1px solid #26262B;align-items:center}
+.row:last-child{border-bottom:0}
+.row .d b{display:block;font-size:16px}
+.row .d span{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.row .v{color:var(--gold);font-weight:700;white-space:nowrap}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;padding:22px 30px;margin-top:16px;border:1px dashed var(--line2);border-radius:16px}
+.total b{font-size:clamp(26px,3vw,36px)}
+
+/* preço */
+.price{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:44px;align-items:stretch}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px;display:flex;flex-direction:column}
+.plan.main{border-color:var(--brand);background:linear-gradient(180deg,rgba(99,102,241,.14),var(--card) 55%)}
+.plan .badge{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--brand);color:#fff;border-radius:999px;padding:5px 12px;margin-bottom:18px}
+.plan .badge.alt{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.plan h3{font-size:24px}
+.plan .from{color:var(--dim);text-decoration:line-through;margin-top:18px;font-size:15px}
+.plan .val{font-size:clamp(40px,5vw,56px);font-weight:800;line-height:1;margin-top:4px}
+.plan .val small{font-size:17px;font-weight:600;color:var(--muted)}
+.plan ul{list-style:none;padding:0;margin:22px 0 28px;flex:1}
+.plan li{padding:7px 0 7px 26px;position:relative;font-size:15px}
+.plan li::before{content:"";position:absolute;left:2px;top:13px;width:12px;height:7px;border-left:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(-45deg)}
+.plan .btn{justify-content:center}
+.plan .fine{font-size:13px;color:var(--dim);margin-top:14px;text-align:center}
+.scar{display:flex;gap:16px;flex-wrap:wrap;margin-top:22px}
+.scar div{flex:1;min-width:260px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;font-size:15px;color:var(--muted)}
+.scar b{color:var(--fg)}
+
+/* sistema completo */
+.upsell{background:linear-gradient(135deg,#15153A,#0F0F11 60%);border:1px solid rgba(99,102,241,.4);border-radius:24px;padding:48px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pillars div{background:rgba(255,255,255,.03);border:1px solid #2A2A44;border-radius:12px;padding:14px}
+.pillars b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+.pillars span{font-size:13px;color:var(--muted)}
+
+/* início */
+.start{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:44px}
+.start .step .n{background:transparent;border:1.5px solid var(--gold);color:var(--gold)}
+
+/* conversa final */
+.ask{margin-top:44px;display:grid;gap:12px;max-width:860px}
+.ask div{display:flex;gap:18px;align-items:baseline;padding:16px 22px;background:var(--card);border:1px solid var(--line);border-radius:14px;font-size:17px}
+.ask i{font-style:normal;font-weight:800;color:var(--gold);font-size:13px;min-width:22px}
+
+/* FAQ */
+.faq{margin-top:40px;display:grid;gap:12px;max-width:900px}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 24px}
+summary{cursor:pointer;list-style:none;padding:20px 0;font-weight:700;font-size:16px;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--gold);font-size:22px;line-height:1}
+details[open] summary::after{content:"\2212"}
+details p{margin:0 0 20px;color:var(--muted)}
+
+/* fim */
+.final{text-align:center;padding:120px 0}
+.final h2{margin:0 auto;max-width:900px}
+.final .lead{margin:20px auto 0}
+.final .cta{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:36px}
+footer{border-top:1px solid #1C1C20;padding:34px 0;color:var(--dim);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer a{text-decoration:none}footer a:hover{color:var(--fg)}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+@media (max-width:980px){
+  .story{grid-template-columns:1fr;gap:28px}
+  .g3,.g4,.feat,.stats,.start{grid-template-columns:repeat(2,1fr)}
+  .flow{grid-template-columns:repeat(2,1fr)}
+  .duo,.mirror,.price,.upsell{grid-template-columns:1fr}
+  .upsell{padding:32px}
+  .nav nav{display:none}
+}
+@media (max-width:640px){
+  section{padding:68px 0}
+  .wrap{padding:0 16px}
+  .g2,.g3,.g4,.feat,.stats,.start,.flow{grid-template-columns:1fr}
+  .turn{grid-template-columns:1fr}
+  .turn .arrow{transform:rotate(90deg);margin:0 auto;width:48px;height:48px}
+  .wa,.book,.motto{grid-template-columns:1fr}
+  .reels{grid-template-columns:1fr}
+  .reel iframe{height:620px}
+  .stack{padding:6px 18px}
+  .row{grid-template-columns:1fr}
+  .plan{padding:26px}
+  .hero::after{display:none}
+  .hero .cta .btn,.final .cta .btn{width:100%;justify-content:center}
+  .nav .btn{padding:9px 14px;font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#topo"><b>153</b><span>Rede <span class="gold">153</span></span></a>
+    <nav><a href="#demonstracao">Demonstração</a><a href="#como-funciona">Como funciona</a><a href="#investimento">Investimento</a><a href="#perguntas">Perguntas</a></nav>
+    <a class="btn primary" href="#demonstracao">Ver uma demonstração</a>
+  </div>
+</header>
+
+<main id="topo">
+
+<!-- 1. ABERTURA -->
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Social selling no Instagram</p>
+    <h1>Quem engaja no seu Instagram <span class="gold">já está pedindo uma conversa.</span><br>A Rede 153 garante que ela aconteça.</h1>
+    <p class="lead">A pessoa curte, comenta ou responde seu story. A Rede 153 coloca ela no seu funil, faz a primeira abordagem na DM com segurança e acompanha o follow-up até a reunião. Na hora de agendar, cria o Google Meet, confirma pelo WhatsApp e lembra a reunião sozinha. Tudo no Chrome que você já usa.</p>
+    <div class="cta">
+      <a class="btn primary" href="#demonstracao">Ver uma demonstração
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn ghost" href="#como-funciona">Como funciona</a>
+    </div>
+    <p class="note">A mesma rede. O mesmo mar. Uma direção diferente.</p>
+    <div class="chips">
+      <span class="chip">Captura de engajamento</span><span class="chip">Funil por etapa</span><span class="chip">Abordagem com IA</span>
+      <span class="chip">Follow-up na DM</span><span class="chip">Google Meet</span><span class="chip">Lembretes automáticos</span><span class="chip">Link de agendamento</span>
+    </div>
+
+    <div class="shot" aria-label="Exemplo do funil da Rede 153">
+      <div class="bar"><i></i><i></i><i></i><span>Rede 153 · Funil</span></div>
+      <div class="board">
+        <div class="col"><h4>Novos <em>38</em></h4>
+          <div class="lc"><div class="u"><span class="av" style="background:#8A6FBF"></span>@dra.marina</div><div class="s">comentou no seu post</div><span class="tag go">ICP alto</span></div>
+          <div class="lc"><div class="u"><span class="av" style="background:#5E8FB8"></span>@rafael.adv</div><div class="s">respondeu seu story</div><span class="tag go">ICP alto</span></div>
+          <div class="lc"><div class="u"><span class="av" style="background:#B8865E"></span>@clinica.lume</div><div class="s">curtiu 3 posts</div></div>
+        </div>
+        <div class="col"><h4>Mensagem 1 <em>12</em></h4>
+          <div class="lc"><div class="u"><span class="av" style="background:#6FA88A"></span>@joao.arq</div><div class="s">abordado hoje, 10:42</div></div>
+          <div class="lc"><div class="u"><span class="av" style="background:#B85E7A"></span>@bia.nutri</div><div class="s">abordado hoje, 11:15</div></div>
+        </div>
+        <div class="col"><h4>Follow-up <em>7</em></h4>
+          <div class="lc"><div class="u"><span class="av" style="background:#8FB85E"></span>@pedro.ceo</div><div class="s">follow-up amanhã</div></div>
+        </div>
+        <div class="col"><h4>Conexão <em>9</em></h4>
+          <div class="lc"><div class="u"><span class="av" style="background:#5EB8B0"></span>@carla.dent</div><div class="s">respondeu na DM</div><span class="tag ok">conversa aberta</span></div>
+        </div>
+        <div class="col"><h4>Agendada <em>4</em></h4>
+          <div class="lc"><div class="u"><span class="av" style="background:#B8A55E"></span>@leo.contador</div><div class="s">qui, 15:00 · Meet</div><span class="tag ok">lembrete 24h enviado</span></div>
+        </div>
+        <div class="col"><h4>Venda <em>2</em></h4>
+          <div class="lc"><div class="u"><span class="av" style="background:#9E5EB8"></span>@ana.psi</div><div class="s">fechou na reunião</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- DEMONSTRAÇÃO -->
+<section id="demonstracao">
+  <div class="wrap">
+    <p class="eyebrow">Demonstração</p>
+    <h2>Veja a Rede 153 funcionando.</h2>
+    <p class="lead">Dois vídeos curtos, gravados na minha própria operação.</p>
+    <div class="reels">
+      <figure class="reel"><iframe src="https://www.instagram.com/reel/DfaebpGBrGl/embed/" loading="lazy" title="Demonstração da Rede 153, vídeo 1" allowtransparency="true" scrolling="no"></iframe>
+        <figcaption><a href="https://www.instagram.com/reel/DfaebpGBrGl/" target="_blank" rel="noopener">Assistir no Instagram</a></figcaption></figure>
+      <figure class="reel"><iframe src="https://www.instagram.com/reel/DfN4tzBsk3o/embed/" loading="lazy" title="Demonstração da Rede 153, vídeo 2" allowtransparency="true" scrolling="no"></iframe>
+        <figcaption><a href="https://www.instagram.com/reel/DfN4tzBsk3o/" target="_blank" rel="noopener">Assistir no Instagram</a></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 2. DIAGNÓSTICO -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Diagnóstico</p>
+    <h2>Antes de falar da ferramenta, três perguntas honestas.</h2>
+    <div class="grid g3 mt">
+      <div class="card"><h3>01</h3><p>Algo me diz que você chegou aqui por um motivo específico. Quantas pessoas engajaram com o seu conteúdo nesta semana e nunca receberam uma mensagem sua?</p></div>
+      <div class="card"><h3>02</h3><p>O que está custando para você não resolver isso agora? Em reuniões que não aconteceram, em vendas que esfriaram, em horas copiando e colando.</p></div>
+      <div class="card"><h3>03</h3><p>Imagina comigo: se em 90 dias toda pessoa interessada virasse conversa, e toda conversa boa virasse reunião marcada, o que mudaria no seu mês?</p></div>
+    </div>
+    <p class="quote">"Conteúdo gera atenção. Quem transforma atenção em dinheiro é o processo."</p>
+  </div>
+</section>
+
+<!-- 3. ESPELHO -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Espelho</p>
+    <h2>Seu conteúdo funciona. O que vaza é o que acontece depois do like.</h2>
+    <div class="mirror">
+      <div class="grid">
+        <div class="card red"><h3>A DM vira um cemitério</h3><p>Curtidas, comentários e respostas de story chegam todo dia. Você responde alguns, esquece outros, e não sabe mais quem já recebeu mensagem.</p></div>
+        <div class="card red"><h3>O follow-up depende da sua memória</h3><p>A pessoa disse "vamos falar semana que vem". A semana passou. Ninguém lembrou. A venda esfriou.</p></div>
+        <div class="card red"><h3>Marcar a reunião dá trabalho demais</h3><p>Troca de mensagens para achar horário, link do Meet copiado na mão, lembrete esquecido e cadeira vazia na hora da call.</p></div>
+      </div>
+      <div class="chaos" aria-label="Rotina comum de quem vende pelo Instagram">
+        <p class="eyebrow" style="margin-bottom:6px">Uma terça comum</p>
+        <div><span>Rolar a aba de notificações e anotar nomes</span><span>40 min</span></div>
+        <div><span>Abrir perfil por perfil para ver se vale abordar</span><span>35 min</span></div>
+        <div><span>Copiar e colar a mesma mensagem</span><span>30 min</span></div>
+        <div><span>Procurar na DM quem estava esperando retorno</span><span>25 min</span></div>
+        <div><span>Combinar horário, criar o Meet e mandar o link</span><span>20 min</span></div>
+        <div><span>Lembrar quem tem reunião amanhã</span><span>10 min</span></div>
+        <div style="padding-top:16px"><b>Por dia, em tarefa que não é vender</b><span style="font-size:18px">2h40</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. CUSTO DA INAÇÃO -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Custo da inação</p>
+    <h2>Deixar como está também é uma decisão. E ela cobra juros.</h2>
+    <div class="grid g4 mt">
+      <div class="card red"><h3>Dinheiro</h3><p>Cada pessoa que engajou e não foi abordada é uma oportunidade que foi conversar com outro profissional.</p></div>
+      <div class="card red"><h3>Tempo</h3><p>Horas por semana em trabalho manual que não exige você. Seu tempo deveria estar na reunião, não na planilha.</p></div>
+      <div class="card red"><h3>Previsibilidade</h3><p>Sem funil, você não sabe quantas conversas precisa abrir para fechar uma venda. O mês bom vira sorte.</p></div>
+      <div class="card red"><h3>Sua conta</h3><p>Ferramentas que disparam mensagens em massa colocam seu Instagram em risco. Perder o perfil é perder o negócio.</p></div>
+    </div>
+    <p class="quote">"Se dobrar o alcance significar dobrar o trabalho manual, isso não é crescimento. É mais carga."</p>
+  </div>
+</section>
+
+<!-- 5. A VIRADA -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">A virada</p>
+    <h2>Existe um jeito de transformar engajamento em agenda sem virar refém da DM.</h2>
+    <div class="turn">
+      <div class="side"><small style="color:var(--red)">Hoje</small><p>"Tenho engajamento, mas não sei quem abordar, esqueço o follow-up e perco reunião."</p></div>
+      <svg class="arrow" viewBox="0 0 64 64" fill="currentColor"><path d="M12 8h22l22 24-22 24H12l22-24z"/></svg>
+      <div class="side"><small style="color:var(--green)">Com a Rede 153</small><p>"Cada pessoa interessada entra no funil, recebe a mensagem certa e chega na reunião lembrada."</p></div>
+    </div>
+    <p class="lead" style="margin-top:36px">A ideia não é mandar mais mensagens. É nunca mais perder uma conversa que já estava pronta para acontecer.</p>
+  </div>
+</section>
+
+
+<!-- 153 -->
+<section id="153">
+  <div class="wrap story">
+    <div>
+      <div class="num" aria-hidden="true">153</div>
+      <p class="num-say">Fala-se "cento e cinquenta e três".</p>
+    </div>
+    <div>
+      <p class="eyebrow">Por que 153</p>
+      <h2 style="font-size:clamp(26px,3.2vw,40px)">A mesma rede. O mesmo mar. <span class="gold">Uma direção diferente.</span></h2>
+      <p class="verse">Em João 21, os discípulos passam a noite inteira pescando e não pegam nada. Pela manhã, recebem uma orientação simples: lancem a rede do outro lado. Lançam de novo e a rede volta com 153 grandes peixes.<cite>João 21:1-11</cite></p>
+      <p class="lead" style="font-size:17px">Não faltava esforço, nem rede, nem mar. Faltava direção. Com o seu Instagram costuma ser igual: o conteúdo existe, a audiência existe, as pessoas engajam. O que falta é saber onde lançar a rede e o que fazer quando ela volta cheia.</p>
+      <div class="motto">
+        <div><b>A rede</b><span>sua audiência e o seu conteúdo</span></div>
+        <div><b>O mar</b><span>o Instagram que você já usa</span></div>
+        <div><b>A direção</b><span>o processo que a Rede 153 coloca no lugar</span></div>
+      </div>
+      <p class="quote" style="font-size:clamp(18px,2vw,22px);margin-top:30px">"153 representa o que acontece quando trabalho encontra direção."</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. COMO FUNCIONA -->
+<section id="como-funciona">
+  <div class="wrap">
+    <p class="eyebrow">Como funciona</p>
+    <h2>Do like à reunião, em cinco movimentos.</h2>
+    <p class="lead">A maioria das ferramentas resolve uma peça: um CRM aqui, um agendador ali, uma automação de mensagens acolá. Se as peças não conversam, o processo continua furado. A Rede 153 conecta tudo.</p>
+    <div class="flow">
+      <div class="step"><div class="n">1</div><h3>Captura</h3><p>Três vezes por dia, quem curtiu, comentou, respondeu story ou começou a seguir entra no funil sozinho.</p></div>
+      <div class="step"><div class="n">2</div><h3>Qualificação</h3><p>A IA lê o perfil e marca quem tem o perfil do seu cliente ideal. Você foca em quem importa.</p></div>
+      <div class="step"><div class="n">3</div><h3>Abordagem</h3><p>O vendedor IA envia a primeira mensagem e o follow-up, como uma pessoa faria, com limite diário e pausas.</p></div>
+      <div class="step"><div class="n">4</div><h3>Conversa</h3><p>Quem responde na DM vira conexão. O funil mostra quem é a pessoa, em que etapa está e o que já aconteceu.</p></div>
+      <div class="step"><div class="n">5</div><h3>Reunião</h3><p>Escolha o horário: o Google Meet é criado, a confirmação vai pelo WhatsApp e os lembretes saem sozinhos.</p></div>
+    </div>
+
+    <div class="feat">
+      <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="4"/></svg><h3>Captura automática</h3><p>Posts recentes, stories, novos seguidores e caixa de entrada. Ninguém que levantou a mão fica para trás.</p></div>
+      <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M7 12h10M10 19h4"/></svg><h3>Funil por etapa</h3><p>Novo, mensagens, conexão, reunião agendada, realizada e venda. Você enxerga onde o processo trava.</p></div>
+      <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4z"/></svg><h3>Vendedor IA com travas</h3><p>Só em horário comercial, até 10 conversas por dia, intervalo de 8 a 20 minutos e parada imediata a qualquer sinal do Instagram.</p></div>
+      <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.9A8 8 0 1 1 21 12z"/></svg><h3>WhatsApp para agendar</h3><p>Quando a conversa evolui para o WhatsApp, um painel ao lado marca a reunião, confirma e lembra, sem trocar de aba.</p></div>
+      <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><h3>Agenda com Google Meet</h3><p>Horários livres lidos da sua agenda, evento criado com Meet e confirmação no WhatsApp em um clique.</p></div>
+      <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg><h3>Seu link de agendamento</h3><p>Uma página com seu nome, tipo rede153.com/seu-nome. A pessoa escolhe o horário e recebe o link no WhatsApp.</p></div>
+    </div>
+
+    <div class="duo">
+      <div class="mock">
+        <h3>Agendamento pelo WhatsApp Web</h3>
+        <p class="cap">O WhatsApp entra só na hora de marcar: horário, Meet, confirmação e lembretes.</p>
+        <div class="wa">
+          <div class="chat">
+            <div class="bub in">Oi! Conversamos no direct. Me passa os horários?</div>
+            <div class="bub out">Faz sim! Tenho quinta às 15h ou sexta às 10h. Qual fica melhor?</div>
+            <div class="bub in">Quinta às 15h</div>
+            <div class="bub out">Fechado! Nossa reunião está confirmada para quinta, 15:00. Link: meet.google.com/abc-defg-hij</div>
+          </div>
+          <div class="side153">
+            <div class="t"><b>153</b>Carla Mendes</div>
+            <label>Etapa</label><div class="f">Reunião agendada</div>
+            <label>Reunião</label>
+            <div class="slots"><span>10:00</span><span>14:00</span><span class="on">15:00</span></div>
+            <label>Lembretes</label>
+            <div class="f" style="color:var(--green)">24h · 1h · 15min</div>
+          </div>
+        </div>
+      </div>
+      <div class="mock">
+        <h3>Página de agendamento com o seu nome</h3>
+        <p class="cap">Mande o link na bio, no story ou no direct.</p>
+        <div class="book">
+          <div class="prof"><div class="ph">SN</div><b>Seu Nome</b><div class="muted" style="margin-top:4px">Reunião de 30 min<br>Google Meet</div></div>
+          <div class="cal">
+            <b>Novembro de 2026</b>
+            <div class="days"><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span><span>D</span>
+              <span class="a">9</span><span class="a">10</span><span class="a">11</span><span class="sel">12</span><span class="a">13</span><span>14</span><span>15</span></div>
+            <div class="slots"><span>09:00</span><span>10:30</span><span class="on">15:00</span><span>16:30</span><span>17:00</span><span>18:00</span></div>
+            <div class="rem"><span>Confirmação no WhatsApp</span><span>Convite por e-mail</span><span>3 lembretes</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. PARA QUEM É -->
+<section class="fit">
+  <div class="wrap">
+    <p class="eyebrow">Fit</p>
+    <h2>A Rede 153 não é para todo mundo.</h2>
+    <p class="lead">Quanto mais claro o perfil, melhor o resultado. E preferimos que você saiba disso antes.</p>
+    <div class="grid g2 mt">
+      <div class="card green"><h3>Faz sentido para quem</h3>
+        <ul class="green">
+          <li>Vende serviço, mentoria, consultoria ou produto de ticket médio a alto</li>
+          <li>Já produz conteúdo e recebe engajamento no Instagram</li>
+          <li>Fecha vendas em conversa, call ou reunião</li>
+          <li>Quer levar a conversa da DM para uma reunião marcada</li>
+          <li>Quer processo, e não mais uma planilha</li>
+          <li>Trabalha sozinho ou com uma pequena equipe comercial</li>
+        </ul></div>
+      <div class="card red"><h3>Não é para quem</h3>
+        <ul class="red">
+          <li>Quer disparar mensagem em massa para lista comprada</li>
+          <li>Busca seguidores, e não clientes</li>
+          <li>Ainda não tem uma oferta clara para vender</li>
+          <li>Espera que a ferramenta venda sem nenhuma conversa humana</li>
+          <li>Não quer deixar o Chrome aberto no horário comercial</li>
+        </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. PROVA -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Prova</p>
+    <h2>Antes de oferecer a ferramenta, eu precisei construir para mim.</h2>
+    <p class="lead">A Rede 153 nasceu na minha própria operação de social selling. Os números abaixo são de execução própria, não de cases inventados.</p>
+    <div class="stats">
+      <div class="stat hl"><b>14.000+</b><span>pessoas capturadas no meu funil pela Rede 153</span></div>
+      <div class="stat hl"><b>R$ 297/mês</b><span>que eu deixei de pagar em outra ferramenta ao migrar para a Rede 153</span></div>
+      <div class="stat"><b>10k → 50k</b><span>seguidores em 7 meses, de forma orgânica</span></div>
+      <div class="stat"><b>R$ 308 mil</b><span>vendidos em 1 mês como closer</span></div>
+      <div class="stat"><b>R$ 1M+</b><span>em bônus e comissões com vendas</span></div>
+      <div class="stat"><b>6.000</b><span>pessoas lideradas em equipe comercial</span></div>
+      <div class="stat"><b>8</b><span>países com operação de vendas</span></div>
+      <div class="stat"><b>R$ 24 mil</b><span>em um único produto de estratégia de conteúdo</span></div>
+    </div>
+    <p class="quote">"A ferramenta não substitui a conversa. Ela garante que a conversa aconteça."</p>
+    <p class="muted" style="margin-top:18px">Felipe Caon, criador da Rede 153</p>
+  </div>
+</section>
+
+<!-- 9. ANCORAGEM -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">O que você recebe</p>
+    <h2>O trabalho de um social seller e de cinco ferramentas. Em um só lugar.</h2>
+    <p class="lead">Valores de referência por mês. Um social seller humano custa no mínimo R$ 1.500 de fixo, mais comissão, e não bate meta todos os dias. As ferramentas consideram equivalentes que fazem cada parte isoladamente.</p>
+    <div class="stack">
+      <div class="row"><div class="d"><b>Social seller para abordagem e follow-up diários</b><span>Fixo de R$ 1.500 mais comissão média de R$ 1.000. Falta, tira férias e precisa de gestão</span></div><div class="v">R$ 2.500</div></div>
+      <div class="row"><div class="d"><b>CRM de social selling com funil por etapa</b><span>Leads, histórico, anotações, responsável e indicadores</span></div><div class="v">R$ 197</div></div>
+      <div class="row"><div class="d"><b>Captura automática de engajamento do Instagram</b><span>Curtidas, comentários, stories, seguidores e caixa de entrada</span></div><div class="v">R$ 147</div></div>
+            <div class="row"><div class="d"><b>Confirmação e lembretes automáticos pelo WhatsApp</b><span>Link da reunião e lembretes de 24h, 1h e 15min antes, sem você lembrar de nada</span></div><div class="v">R$ 297</div></div>
+      <div class="row"><div class="d"><b>Agendador com Google Meet e link público</b><span>Página com o seu nome, horários livres da sua agenda, convite por e-mail</span></div><div class="v">R$ 79</div></div>
+      <div class="row"><div class="d"><b>Funil compartilhado com a equipe</b><span>Cada vendedor com login, tudo sincronizado em tempo real</span></div><div class="v">R$ 99</div></div>
+    </div>
+    <div class="total"><span class="muted">Somando a pessoa e as ferramentas</span><b>R$ 3.319 <span class="muted" style="font-size:18px;font-weight:600">por mês</span></b></div>
+  </div>
+</section>
+
+<!-- 10. INVESTIMENTO -->
+<section id="investimento">
+  <div class="wrap">
+    <p class="eyebrow">Investimento</p>
+    <h2>Tudo isso trabalhando todos os dias, por menos do que o fixo de um social seller.</h2>
+    <div class="price">
+      <div class="plan main">
+        <span class="badge">Condição de fundador</span>
+        <h3>Rede 153</h3>
+        <p class="muted" style="margin:6px 0 0">A ferramenta completa, para você aplicar no seu processo.</p>
+        <div class="from">R$ 1.497/mês</div>
+        <div class="val">R$ 997<small>/mês</small></div>
+        <p class="muted" style="margin:10px 0 0;font-size:14px">Sem fixo, sem comissão, sem falta e sem rotatividade.</p>
+        <ul>
+          <li>Captura, qualificação e funil completos</li>
+          <li>Vendedor IA que aborda e faz follow-up todos os dias, com travas de segurança</li>
+          <li>Abordagem e follow-up na DM</li>
+          <li>Agendamento com Google Meet, confirmação e lembretes pelo WhatsApp</li>
+          <li>Seu link de agendamento rede153.com/seu-nome</li>
+          <li>Equipe no mesmo funil</li>
+          <li>Onboarding de 30 minutos ao vivo</li>
+          <li>Todas as melhorias, automaticamente</li>
+        </ul>
+        <a class="btn primary" href="https://rede153.com/felipe">Quero começar com a Rede 153</a>
+        <p class="fine">Sem fidelidade. O valor de fundador fica travado enquanto a assinatura estiver ativa.</p>
+      </div>
+      <div class="plan">
+        <span class="badge alt">Para quem quer o sistema inteiro</span>
+        <h3>Sistema de Crescimento Digital e Comercial</h3>
+        <p class="muted" style="margin:6px 0 0">Seis meses construindo com o Felipe o produto, a estratégia, a aquisição e o comercial. A Rede 153 vem inclusa.</p>
+        <ul>
+          <li>12 encontros individuais com o Felipe</li>
+          <li>Posicionamento, oferta e esteira de produtos</li>
+          <li>60 conteúdos por mês, com análise de performance</li>
+          <li>Scripts de social selling e playbook comercial</li>
+          <li>Script de call e PDF de oferta</li>
+          <li>KPIs e gestão do processo</li>
+          <li>Rede 153 inclusa durante o programa</li>
+        </ul>
+        <a class="btn ghost" href="https://rede153.com/felipe">Aplicar para uma conversa</a>
+        <p class="fine">Vagas limitadas pela quantidade de operações que o Felipe acompanha de perto.</p>
+      </div>
+    </div>
+    <div class="scar">
+      <div><b>Por que existe um valor de fundador.</b> Os primeiros clientes ajudam a lapidar o produto com feedback. Em troca, entram com um valor que não volta a ser oferecido.</div>
+      <div><b>Por que as vagas são limitadas.</b> Cada novo cliente tem onboarding ao vivo comigo. A condição de fundador vale para as primeiras 30 contas.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. SISTEMA COMPLETO -->
+<section>
+  <div class="wrap">
+    <div class="upsell">
+      <div>
+        <p class="eyebrow">Além da ferramenta</p>
+        <h2 style="font-size:clamp(26px,3.2vw,38px)">A Rede 153 resolve o processo. Às vezes o gargalo está antes dele.</h2>
+        <p class="lead" style="font-size:17px">Se a sua oferta ainda não está clara, se o conteúdo não gera demanda ou se a call não fecha, nenhuma ferramenta resolve sozinha. Para isso existe o Sistema de Crescimento Digital e Comercial: quatro frentes integradas, construídas comigo em seis meses, para crescer sem depender mais das suas horas.</p>
+        <div style="margin-top:26px"><a class="btn primary" href="https://rede153.com/felipe">Conversar sobre o sistema completo</a></div>
+      </div>
+      <div class="pillars">
+        <div><b>1. Produto</b><span>Oferta que faz sentido para o mercado e para o ticket desejado</span></div>
+        <div><b>2. Estratégia</b><span>Posicionamento, esteira e lógica de monetização</span></div>
+        <div><b>3. Aquisição</b><span>Conteúdo, social selling e automações que criam oportunidades</span></div>
+        <div><b>4. Comercial</b><span>Abordagem, CRM, call, PDF de oferta e fechamento</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12. GARANTIA -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Segurança</p>
+    <h2>Uma garantia simples, porque a ferramenta precisa provar valor no seu dia a dia.</h2>
+    <div class="grid g3 mt">
+      <div class="card green"><h3>7 dias para testar</h3><p>Use a Rede 153 por 7 dias no seu processo real. Se não fizer sentido, devolvemos 100% do valor, sem perguntas.</p></div>
+      <div class="card green"><h3>Sem fidelidade</h3><p>A assinatura é mensal. Se um dia deixar de valer o investimento, você cancela quando quiser.</p></div>
+      <div class="card"><h3>Seus dados são seus</h3><p>O funil fica na sua conta, acessível só para você e sua equipe. Você pode baixar o backup completo a qualquer momento.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 13. COMO COMEÇA -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Início</p>
+    <h2>Começar é mais simples do que parece.</h2>
+    <div class="start">
+      <div class="step"><div class="n">1</div><h3>Conversa</h3><p>Você assiste à demonstração e agenda 30 minutos comigo para ver se a Rede 153 encaixa no seu processo.</p></div>
+      <div class="step"><div class="n">2</div><h3>Acesso</h3><p>Você recebe seu login e instala a extensão no Google Chrome em dois cliques.</p></div>
+      <div class="step"><div class="n">3</div><h3>Onboarding ao vivo</h3><p>Conectamos Instagram, Google Agenda e WhatsApp Web e configuramos seu cliente ideal e seu link.</p></div>
+      <div class="step"><div class="n">4</div><h3>Funil rodando</h3><p>Na mesma semana, quem engaja com você já começa a entrar no funil.</p></div>
+    </div>
+    <p class="lead" style="margin-top:32px">Você não precisa chegar com o processo organizado. Organizar faz parte do onboarding.</p>
+  </div>
+</section>
+
+<!-- 14. ALINHAMENTO -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Alinhamento</p>
+    <h2>Antes de decidir, responda para você mesmo.</h2>
+    <div class="ask">
+      <div><i>01</i><span>O que mais fez sentido até aqui?</span></div>
+      <div><i>02</i><span>De 1 a 10, onde 1 é "não é para mim agora" e 10 é "quero começar", onde você está?</span></div>
+      <div><i>03</i><span>Quanto custa hoje, em fixo e comissão, ter alguém fazendo esse trabalho todos os dias? E quanto custa não ter ninguém?</span></div>
+      <div><i>04</i><span>Quantas horas por semana você ganharia de volta sem o trabalho manual da DM?</span></div>
+      <div><i>05</i><span>Se a Rede 153 trouxer mais conversas e reuniões sem aumentar as suas horas, faz sentido começar agora?</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 15. FAQ -->
+<section id="perguntas">
+  <div class="wrap">
+    <p class="eyebrow">Perguntas</p>
+    <h2>As dúvidas que normalmente aparecem antes de começar.</h2>
+    <div class="faq">
+      <details><summary>Corro risco de ter meu Instagram bloqueado?</summary><p>A Rede 153 foi construída com esse cuidado como prioridade. A captura faz poucas leituras com pausas, o vendedor IA trabalha só em horário comercial, com limite diário, intervalos de 8 a 20 minutos e digitação como a de uma pessoa, e para sozinho ao primeiro sinal do Instagram. Nenhuma ferramenta pode prometer risco zero, mas o comportamento é o de um profissional atento, nunca o de um robô de disparo.</p></details>
+      <details><summary>Preciso deixar o computador ligado?</summary><p>Sim. A Rede 153 roda no seu Google Chrome, com o Instagram aberto, e o WhatsApp Web se você quiser os lembretes automáticos. As automações acontecem enquanto o Chrome estiver aberto, no horário que você definir. Isso mantém tudo na sua conta e no seu computador, sem senha guardada em servidor de terceiros.</p></details>
+      <details><summary>Funciona no Windows e no Mac?</summary><p>Funciona em qualquer computador com Google Chrome, Windows ou Mac. Você precisa do Instagram, de uma conta Google para a agenda e do WhatsApp Web para confirmação e lembretes.</p></details>
+      <details><summary>Preciso pagar alguma outra ferramenta ou inteligência artificial?</summary><p>Não. O valor da assinatura já inclui tudo, inclusive a IA. Você não precisa contratar CRM, agendador, ferramenta de lembretes nem assinatura de IA à parte.</p></details>
+      <details><summary>Minha equipe pode usar?</summary><p>Pode. Cada vendedor entra com o próprio login e todos trabalham no mesmo funil, com responsável por lead e histórico do que cada um fez.</p></details>
+      <details><summary>E se eu não quiser que todo mundo entre no funil?</summary><p>Você decide. Dá para agendar reuniões pelo WhatsApp ou pelo seu link sem colocar a pessoa no funil, e colocar depois se fizer sentido.</p></details>
+      <details><summary>"Eu já uso outra ferramenta."</summary><p>A pergunta é: ela conecta a captura no Instagram, a abordagem e o follow-up na DM, a agenda e os lembretes? Se você paga mais de uma ferramenta, ou uma pessoa, para fazer isso, a Rede 153 faz o conjunto por menos do que o fixo de um social seller.</p></details>
+      <details><summary>"R$ 997 por mês é caro."</summary><p>Caro comparado a quê? Um social seller humano custa no mínimo R$ 1.500 de fixo mais comissão, e não aborda ninguém nos dias em que falta. Se a Rede 153 trouxer uma única venda a mais por mês, ela normalmente já se pagou.</p></details>
+      <details><summary>"Não tenho tempo para aprender uma ferramenta nova."</summary><p>É exatamente por isso que o onboarding é ao vivo. Em 30 minutos tudo fica configurado, e a partir daí a Rede 153 tira trabalho da sua rotina em vez de colocar.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 16. VISÃO DE FUTURO E ENCERRAMENTO -->
+<section class="final">
+  <div class="wrap">
+    <p class="eyebrow">Visão de futuro</p>
+    <h2>O próximo nível não é postar mais. <span class="gold">É não perder mais nenhuma conversa que o seu conteúdo já gerou.</span></h2>
+    <p class="lead">Agenda com reuniões qualificadas, follow-up que acontece sem depender da sua memória e um funil que mostra exatamente onde está o seu próximo cliente.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://rede153.com/felipe">Quero conversar sobre a Rede 153
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn ghost" href="#demonstracao">Ver a demonstração</a>
+    </div>
+    <p class="note muted" style="margin-top:16px;font-size:14px">Próximo passo: escolher um horário. Leva menos de um minuto.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Rede 153 · uma empresa 153 · A mesma rede. O mesmo mar. Uma direção diferente.</span>
+    <span><a href="#demonstracao">Ver demonstração</a> · <a href="https://rede153.com/felipe">Agendar uma conversa</a></span>
+  </div>
+</footer>
+
+<script>
+// Aparece suavemente ao rolar (sem isso, tudo já aparece normalmente)
+(() => {
+  const els = document.querySelectorAll('section:not(.hero) .wrap > *');
+  if (!('IntersectionObserver' in window)) return;
+  els.forEach(e => e.classList.add('reveal'));
+  const io = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  els.forEach(e => io.observe(e));
+})();
+</script>
+</body>
+</html>
