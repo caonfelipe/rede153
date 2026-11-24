@@ -162,6 +162,14 @@ async function rpc(name, args = {}) {
 }
 
 // ---------- situação de cada cliente ----------
+// Quanto já foi pago no período que termina no vencimento (ex.: semestral com entrada e saldo)
+const MESES = { mensal: 1, semestral: 6, anual: 12 };
+function ciclo(c) {
+  if (!MESES[c.plano] || !c.vence || c.valor == null) return null;
+  const ini = addMonths(c.vence, -MESES[c.plano]);
+  const pago = (c.pagamentos || []).filter(p => p.pago_em >= ini).reduce((t, p) => t + (+p.valor || 0), 0);
+  return { ini, pago, falta: Math.max(0, Math.round((+c.valor - pago) * 100) / 100) };
+}
 function status(c) {
   if (!c.ativo) return { cls: 'err', txt: 'Bloqueado' + (c.bloqueado_em ? ' desde ' + new Date(c.bloqueado_em).toLocaleDateString('pt-BR') : ''), rank: 5 };
   if (c.plano === 'proprio') return { cls: 'gray', txt: 'Seu espaço', rank: 9 };
@@ -170,20 +178,27 @@ function status(c) {
   if (!c.vence) return { cls: 'warn', txt: 'Sem data de vencimento', rank: 4 };
   const d = dayNum(c.vence) - dayNum(hoje), when = dBR(c.vence);
   const what = c.plano === 'teste' ? 'Teste' : c.plano === 'mensal' ? 'Mensalidade' : 'Plano';
+  const cy = ciclo(c);
+  if (cy && cy.pago > 0 && cy.falta > 0) {
+    const f = brl(cy.falta);
+    if (d < 0) return { cls: 'err', txt: `Faltam ${f}: venceu há ${-d} dia${d === -1 ? '' : 's'} (${when})`, rank: 0, alert: true, d };
+    if (d <= 3) return { cls: 'warn', txt: `Faltam ${f} até ${when} (${d === 0 ? 'hoje' : 'em ' + d + ' dia' + (d === 1 ? '' : 's')})`, rank: d === 0 ? 1 : 2, alert: true, d };
+    return { cls: 'warn', txt: `Faltam ${f} até ${when} (${d} dias)`, rank: 3, d };
+  }
   if (d < 0) return { cls: 'err', txt: `${c.plano === 'teste' ? 'Teste acabou' : 'Venceu'} há ${-d} dia${d === -1 ? '' : 's'} (${when})`, rank: 0, alert: true, d };
   if (d === 0) return { cls: 'err', txt: `${c.plano === 'teste' ? 'Teste acaba' : 'Vence'} hoje (${when})`, rank: 1, alert: true, d };
   if (d <= 3) return { cls: 'warn', txt: `${what} ${c.plano === 'teste' ? 'acaba' : 'vence'} em ${d} dia${d === 1 ? '' : 's'} (${when})`, rank: 2, alert: true, d };
-  return { cls: 'ok', txt: `${c.plano === 'teste' ? 'Teste até' : 'Pago até'} ${when} (${d} dias)`, rank: 3, d };
+  return { cls: 'ok', txt: `${c.plano === 'teste' ? 'Teste até' : cy && cy.falta ? 'Próximo vencimento' : 'Pago até'} ${when} (${d} dias)`, rank: 3, d };
 }
 function cobranca(c) {
-  const s = status(c), n = first(c.espaco), when = dBR(c.vence);
+  const s = status(c), n = first(c.espaco), when = dBR(c.vence), cy = ciclo(c);
   const cob = c.plano === 'mensal' ? 'A mensalidade' : c.plano === 'semestral' ? 'O plano semestral' : 'O plano anual';
   if (c.plano === 'teste') return s.d < 0
     ? `Oi, ${n}! Seu período de teste da Rede 153 terminou em ${when}. Gostou? Quer continuar usando? Me fala que eu te passo como fica.`
     : `Oi, ${n}! Seu período de teste da Rede 153 termina em ${when}. O que está achando? Quer continuar usando depois do teste?`;
   return s.d < 0
     ? `Oi, ${n}! Tudo bem? ${cob} da Rede 153 venceu em ${when} e ainda não identifiquei o pagamento. Consegue verificar para mim?`
-    : `Oi, ${n}! Passando para lembrar que ${cob.toLowerCase()} da Rede 153 vence em ${when}${c.valor ? ', no valor de ' + brl(c.valor) : ''}. Qualquer dúvida, me chama!`;
+    : `Oi, ${n}! Passando para lembrar que ${cob.toLowerCase()} da Rede 153 vence em ${when}${c.valor ? ', no valor de ' + brl(cy && cy.pago > 0 && cy.falta ? cy.falta : c.valor) : ''}. Qualquer dúvida, me chama!`;
 }
 const waLink = c => c.whats ? `https://wa.me/${c.whats.length <= 11 ? '55' + c.whats : c.whats}?text=${encodeURIComponent(cobranca(c))}` : '';
 
@@ -269,7 +284,7 @@ function render() {
 }
 
 function card(c) {
-  const s = status(c), pg = c.pagamentos && c.pagamentos[0];
+  const s = status(c), pg = c.pagamentos && c.pagamentos[0], cy = ciclo(c);
   return `<article class="cli${c.ativo ? '' : ' off'}">
     <div class="h"><b>${esc(c.espaco)}</b>${c.ativo ? '' : '<span class="tag bloq">Bloqueado</span>'}<span class="tag ${esc(c.plano || '')}">${esc(PLANOS[c.plano] || 'Sem plano')}</span></div>
     <div class="st ${s.cls}">${esc(s.txt)}</div>
@@ -277,6 +292,7 @@ function card(c) {
       ${c.logins.map(l => `<dt>${l.papel === 'owner' ? 'Login' : 'Vendedor'}</dt><dd>${esc(l.email)} · ${esc(ago(l.ultimo_acesso))}</dd>`).join('')}
       <dt>Leads</dt><dd>${Number(c.leads).toLocaleString('pt-BR')}</dd>
       ${c.valor != null ? `<dt>Valor</dt><dd>${esc(brl(c.valor))}${c.plano === 'anual' ? ' por ano' : c.plano === 'semestral' ? ' por semestre' : c.plano === 'mensal' ? ' por mês' : ''}</dd>` : ''}
+      ${cy ? `<dt>Este período</dt><dd>${esc(brl(cy.pago))} de ${esc(brl(c.valor))} pago${cy.falta ? ' · falta ' + esc(brl(cy.falta)) : ''}</dd>` : ''}
       ${c.inicio ? `<dt>Início</dt><dd>${esc(dBR(c.inicio))}</dd>` : ''}
       ${pg ? `<dt>Último pag.</dt><dd>${esc(dBR(pg.pago_em))}${pg.valor != null ? ' · ' + esc(brl(pg.valor)) : ''}</dd>
       <dt>Total pago</dt><dd>${esc(brl(c.pagamentos.reduce((t, p) => t + (+p.valor || 0), 0)))} em ${c.pagamentos.length} pagamento${c.pagamentos.length > 1 ? 's' : ''}</dd>` : ''}
@@ -313,20 +329,27 @@ async function act(a, c, btn) {
   if (a === 'edit') return openEdit(c);
   if (a === 'msg') { try { await navigator.clipboard.writeText(cobranca(c)); toast('Mensagem copiada. Cadastre o WhatsApp em Editar para abrir direto.'); } catch (e) { prompt('Copie a mensagem:', cobranca(c)); } return; }
   if (a === 'pay') {
-    const recur = ['mensal', 'semestral', 'anual'].includes(c.plano);
+    const recur = ['mensal', 'semestral', 'anual'].includes(c.plano), cy = ciclo(c);
     const prox = dBR(addMonths(c.vence || hoje, c.plano === 'anual' ? 12 : c.plano === 'semestral' ? 6 : 1));
     return modal(`<h3>Registrar pagamento</h3>
     <p class="note"><b>${esc(c.espaco)}</b>${c.plano ? ', plano ' + esc(PLANOS[c.plano].toLowerCase()) : ''}.</p>
     <div class="two">
-      <label>Valor recebido<input type="number" step="0.01" min="0" id="pv" value="${esc(c.valor ?? '')}"></label>
+      <label>Valor recebido<input type="number" step="0.01" min="0" id="pv" value="${esc(cy && cy.falta ? cy.falta : c.valor ?? '')}"></label>
       <label>Data do pagamento<input type="date" id="pd" value="${esc(hoje)}" max="${esc(hoje)}"></label>
     </div>
     ${recur ? `<label class="chk" style="flex-direction:row;align-items:flex-start;gap:8px;font-weight:500"><input type="checkbox" id="pa" checked style="width:auto;margin-top:3px">
       <span>Avançar o vencimento de ${esc(dBR(c.vence) || 'hoje')} para <b>${esc(prox)}</b>${c.ativo ? '' : ' e liberar o acesso'}<br><small>Desmarque para lançar um pagamento antigo, que já está dentro da data de vencimento atual.</small></span></label>` : ''}
+    <p class="note" id="pRest">${cy && cy.pago ? `Já pago neste período: ${esc(brl(cy.pago))} de ${esc(brl(c.valor))}.` : ''}</p>
     <div class="err" id="merr" role="alert"></div>
     <div class="foot"><button class="btn g" data-close>Cancelar</button><button class="btn" id="pOk">Registrar pagamento</button></div>`,
-    () => $('#pOk').onclick = e => run(e.target, () => rpc('painel_pagou', { p_id: c.id, p_valor: $('#pv').value === '' ? null : +$('#pv').value,
-      p_data: $('#pd').value || null, p_avancar: recur ? $('#pa').checked : false })));
+    () => {
+      // Pagamento parcial (ex.: entrada): não avança o vencimento até completar o valor do período
+      const upd = () => { if (!recur || !cy || !cy.falta) return; const v = +$('#pv').value || 0, rest = Math.max(0, cy.falta - v);
+        $('#pa').checked = rest === 0; $('#pRest').textContent = rest ? `Pagamento parcial: depois dele ainda faltam ${brl(rest)} deste período.` : 'Com este pagamento, o período fica quitado.'; };
+      if ($('#pv')) $('#pv').oninput = upd; upd();
+      $('#pOk').onclick = e => run(e.target, () => rpc('painel_pagou', { p_id: c.id, p_valor: $('#pv').value === '' ? null : +$('#pv').value,
+      p_data: $('#pd').value || null, p_avancar: recur ? $('#pa').checked : false }));
+    });
   }
   if (a === 'block') return modal(`<h3>Bloquear ${esc(c.espaco)}?</h3>
     <p class="note">A pessoa e os vendedores dela param de usar na hora: a extensão mostra "Acesso suspenso" e o link de agendamento sai do ar. Os dados ficam guardados, e você pode liberar quando quiser.</p>
