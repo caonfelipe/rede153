@@ -46,7 +46,7 @@
   .top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
   .top h1 { font-size: 22px; margin: 0; flex: 1; min-width: 180px; }
   .top .who { color: var(--muted); font-size: 13px; }
-  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
   .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
   .kpi span { display: block; color: var(--muted); font-size: 12.5px; font-weight: 500; }
   .kpi b { display: block; font-size: 26px; font-variant-numeric: tabular-nums; line-height: 1.25; margin-top: 2px; }
@@ -100,10 +100,12 @@
   .modal .foot { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; margin-top: 4px; }
   .quick { display: flex; gap: 6px; flex-wrap: wrap; }
   .note { font-size: 13px; color: var(--muted); margin: 0; }
+  .link { background: none; border: 0; padding: 0; color: var(--err); font-size: 12.5px; text-decoration: underline; }
   .hist { font-size: 13px; color: var(--muted); margin: 0; padding-left: 18px; }
   .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 500; z-index: 20; max-width: calc(100vw - 32px); }
   .toast[hidden] { display: none; }
 
+  @media (max-width: 1000px) { .kpis { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 760px) {
     .kpis { grid-template-columns: 1fr 1fr; }
     .bar input { max-width: none; margin-left: 0; }
@@ -221,6 +223,7 @@ function render() {
   const ativos = cl.filter(c => c.ativo);
   const alertas = cl.filter(c => c.ativo && status(c).alert).sort((a, b) => status(a).d - status(b).d);
   const semPlano = cl.filter(c => c.ativo && (!c.plano || (c.plano !== 'cortesia' && !c.vence)));
+  const totalPago = clients.reduce((s, c) => s + (c.pagamentos || []).reduce((t, p) => t + (+p.valor || 0), 0), 0);
   const receita = ativos.reduce((s, c) => s + (c.plano === 'mensal' ? +c.valor || 0 : c.plano === 'semestral' ? (+c.valor || 0) / 6 : c.plano === 'anual' ? (+c.valor || 0) / 12 : 0), 0);
   const counts = { todos: clients.length, teste: 0, mensal: 0, semestral: 0, anual: 0, cortesia: 0, sem: 0, bloq: 0 };
   for (const c of clients) { if (!c.ativo) counts.bloq++; if (c.plano && counts[c.plano] != null) counts[c.plano]++; if (!c.plano) counts.sem++; }
@@ -240,7 +243,8 @@ function render() {
       <div class="kpi"><span>Clientes ativos</span><b>${ativos.length}</b></div>
       <div class="kpi"><span>Em teste</span><b>${ativos.filter(c => c.plano === 'teste').length}</b></div>
       <div class="kpi${alertas.length ? ' alert' : ''}"><span>Para cobrar ou decidir</span><b>${alertas.length}</b></div>
-      <div class="kpi"><span>Receita mensal</span><b>${esc(brl(receita))}</b></div>
+      <div class="kpi" title="Quanto entra por mês com os planos ativos (semestral dividido por 6, anual por 12)"><span>Receita recorrente por mês</span><b>${esc(brl(receita))}</b></div>
+      <div class="kpi" title="Soma de todos os pagamentos registrados"><span>Total recebido</span><b>${esc(brl(totalPago))}</b></div>
     </div>
     ${alertas.length ? `<section class="att"><h2>Precisa de atenção</h2>${alertas.map(c => `<div class="row">
       <div class="t"><b>${esc(c.espaco)}</b><span>${esc(status(c).txt)}${c.valor ? ' · ' + esc(brl(c.valor)) : ''}</span></div>
@@ -274,7 +278,8 @@ function card(c) {
       <dt>Leads</dt><dd>${Number(c.leads).toLocaleString('pt-BR')}</dd>
       ${c.valor != null ? `<dt>Valor</dt><dd>${esc(brl(c.valor))}${c.plano === 'anual' ? ' por ano' : c.plano === 'semestral' ? ' por semestre' : c.plano === 'mensal' ? ' por mês' : ''}</dd>` : ''}
       ${c.inicio ? `<dt>Início</dt><dd>${esc(dBR(c.inicio))}</dd>` : ''}
-      ${pg ? `<dt>Último pag.</dt><dd>${esc(dBR(pg.pago_em))}${pg.valor != null ? ' · ' + esc(brl(pg.valor)) : ''}</dd>` : ''}
+      ${pg ? `<dt>Último pag.</dt><dd>${esc(dBR(pg.pago_em))}${pg.valor != null ? ' · ' + esc(brl(pg.valor)) : ''}</dd>
+      <dt>Total pago</dt><dd>${esc(brl(c.pagamentos.reduce((t, p) => t + (+p.valor || 0), 0)))} em ${c.pagamentos.length} pagamento${c.pagamentos.length > 1 ? 's' : ''}</dd>` : ''}
       ${c.whats ? `<dt>WhatsApp</dt><dd>${esc(c.whats)}</dd>` : ''}
     </dl>
     ${c.obs ? `<div class="obs">${esc(c.obs)}</div>` : ''}
@@ -307,12 +312,22 @@ async function act(a, c, btn) {
   if (!c) return;
   if (a === 'edit') return openEdit(c);
   if (a === 'msg') { try { await navigator.clipboard.writeText(cobranca(c)); toast('Mensagem copiada. Cadastre o WhatsApp em Editar para abrir direto.'); } catch (e) { prompt('Copie a mensagem:', cobranca(c)); } return; }
-  if (a === 'pay') return modal(`<h3>Recebi o pagamento</h3>
-    <p class="note"><b>${esc(c.espaco)}</b>, plano ${esc(PLANOS[c.plano].toLowerCase())}. O vencimento passa de ${esc(dBR(c.vence) || 'hoje')} para <b>${esc(dBR(addMonths(c.vence || hoje, c.plano === 'anual' ? 12 : c.plano === 'semestral' ? 6 : 1)))}</b>${c.ativo ? '' : ' e o acesso é liberado'}.</p>
-    <label>Valor recebido<input type="number" step="0.01" min="0" id="pv" value="${esc(c.valor ?? '')}"></label>
+  if (a === 'pay') {
+    const recur = ['mensal', 'semestral', 'anual'].includes(c.plano);
+    const prox = dBR(addMonths(c.vence || hoje, c.plano === 'anual' ? 12 : c.plano === 'semestral' ? 6 : 1));
+    return modal(`<h3>Registrar pagamento</h3>
+    <p class="note"><b>${esc(c.espaco)}</b>${c.plano ? ', plano ' + esc(PLANOS[c.plano].toLowerCase()) : ''}.</p>
+    <div class="two">
+      <label>Valor recebido<input type="number" step="0.01" min="0" id="pv" value="${esc(c.valor ?? '')}"></label>
+      <label>Data do pagamento<input type="date" id="pd" value="${esc(hoje)}" max="${esc(hoje)}"></label>
+    </div>
+    ${recur ? `<label class="chk" style="flex-direction:row;align-items:flex-start;gap:8px;font-weight:500"><input type="checkbox" id="pa" checked style="width:auto;margin-top:3px">
+      <span>Avançar o vencimento de ${esc(dBR(c.vence) || 'hoje')} para <b>${esc(prox)}</b>${c.ativo ? '' : ' e liberar o acesso'}<br><small>Desmarque para lançar um pagamento antigo, que já está dentro da data de vencimento atual.</small></span></label>` : ''}
     <div class="err" id="merr" role="alert"></div>
     <div class="foot"><button class="btn g" data-close>Cancelar</button><button class="btn" id="pOk">Registrar pagamento</button></div>`,
-    () => $('#pOk').onclick = e => run(e.target, () => rpc('painel_pagou', { p_id: c.id, p_valor: $('#pv').value === '' ? null : +$('#pv').value })));
+    () => $('#pOk').onclick = e => run(e.target, () => rpc('painel_pagou', { p_id: c.id, p_valor: $('#pv').value === '' ? null : +$('#pv').value,
+      p_data: $('#pd').value || null, p_avancar: recur ? $('#pa').checked : false })));
+  }
   if (a === 'block') return modal(`<h3>Bloquear ${esc(c.espaco)}?</h3>
     <p class="note">A pessoa e os vendedores dela param de usar na hora: a extensão mostra "Acesso suspenso" e o link de agendamento sai do ar. Os dados ficam guardados, e você pode liberar quando quiser.</p>
     <div class="err" id="merr" role="alert"></div>
@@ -343,11 +358,16 @@ function openEdit(c) {
     ${planFields(c)}
     <label>Início<input type="date" id="eInicio" value="${esc(c.inicio || '')}"></label>
     <label>Anotações<textarea id="eObs" rows="3" placeholder="Ex.: paga por Pix todo dia 10">${esc(c.obs || '')}</textarea></label>
-    ${pg.length ? `<div><p class="note" style="font-weight:600;color:var(--fg)">Pagamentos recebidos</p><ul class="hist">${pg.slice(0, 12).map(p => `<li>${esc(dBR(p.pago_em))}${p.valor != null ? ' · ' + esc(brl(p.valor)) : ''}</li>`).join('')}</ul></div>` : ''}
+    ${pg.length ? `<div><p class="note" style="font-weight:600;color:var(--fg)">Pagamentos recebidos</p><ul class="hist">${pg.map(p => `<li>${esc(dBR(p.pago_em))}${p.valor != null ? ' · ' + esc(brl(p.valor)) : ''} <button class="link" type="button" data-del="${esc(p.id)}">apagar</button></li>`).join('')}</ul></div>` : ''}
     <div class="err" id="merr" role="alert"></div>
     <div class="foot"><button class="btn g" data-close>Cancelar</button><button class="btn" id="eOk">Salvar</button></div>`,
     () => {
       bindQuick();
+      $('#modal').querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+        if (!confirm('Apagar este pagamento? O vencimento não muda.')) return;
+        b.disabled = true;
+        try { toast(await rpc('painel_pagamento_apagar', { p_pag: b.dataset.del })); b.closest('li').remove(); await load(); } catch (e) { b.disabled = false; toast(e.message); }
+      });
       $('#eOk').onclick = e => run(e.target, () => rpc('painel_salvar', {
         p_id: c.id, p_nome: $('#eNome').value, p_plano: $('#ePlano').value, p_valor: $('#eValor').value === '' ? null : +$('#eValor').value,
         p_inicio: $('#eInicio').value || null, p_vence: $('#eVence').value || null, p_whats: $('#eWhats').value, p_obs: $('#eObs').value }));
