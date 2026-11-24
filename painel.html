@@ -329,28 +329,40 @@ async function act(a, c, btn) {
   if (a === 'edit') return openEdit(c);
   if (a === 'msg') { try { await navigator.clipboard.writeText(cobranca(c)); toast('Mensagem copiada. Cadastre o WhatsApp em Editar para abrir direto.'); } catch (e) { prompt('Copie a mensagem:', cobranca(c)); } return; }
   if (a === 'pay') {
-    const recur = ['mensal', 'semestral', 'anual'].includes(c.plano), cy = ciclo(c);
-    const prox = dBR(addMonths(c.vence || hoje, c.plano === 'anual' ? 12 : c.plano === 'semestral' ? 6 : 1));
+    const recur = ['mensal', 'semestral', 'anual'].includes(c.plano), cy = ciclo(c), per = MESES[c.plano] || 1;
+    // Sugestão do novo vencimento: 1º pagamento conta a partir do início do plano; os seguintes, a partir do vencimento atual
+    const sug = () => addMonths(!(c.pagamentos || []).length && c.inicio ? c.inicio : c.vence || $('#pd').value || hoje, per);
     return modal(`<h3>Registrar pagamento</h3>
-    <p class="note"><b>${esc(c.espaco)}</b>${c.plano ? ', plano ' + esc(PLANOS[c.plano].toLowerCase()) : ''}.</p>
+    <p class="note"><b>${esc(c.espaco)}</b>${c.plano ? ', plano ' + esc(PLANOS[c.plano].toLowerCase()) : ''}${c.vence ? '. Vencimento atual: ' + esc(dBR(c.vence)) : ''}.</p>
     <div class="two">
       <label>Valor recebido<input type="number" step="0.01" min="0" id="pv" value="${esc(cy && cy.falta ? cy.falta : c.valor ?? '')}"></label>
       <label>Data do pagamento<input type="date" id="pd" value="${esc(hoje)}" max="${esc(hoje)}"></label>
     </div>
-    ${recur ? `<label class="chk" style="flex-direction:row;align-items:flex-start;gap:8px;font-weight:500"><input type="checkbox" id="pa" checked style="width:auto;margin-top:3px">
-      <span>Avançar o vencimento de ${esc(dBR(c.vence) || 'hoje')} para <b>${esc(prox)}</b>${c.ativo ? '' : ' e liberar o acesso'}<br><small>Desmarque para lançar um pagamento antigo, que já está dentro da data de vencimento atual.</small></span></label>` : ''}
+    ${recur ? `<label style="flex-direction:row;align-items:center;gap:8px;font-weight:500"><input type="checkbox" id="pa" checked style="width:auto">Atualizar o vencimento${c.ativo ? '' : ' e liberar o acesso'}</label>
+      <label>Novo vencimento<small>Sugestão: ${per === 12 ? '1 ano' : per === 6 ? '6 meses' : '1 mês'} depois ${!(c.pagamentos || []).length && c.inicio ? 'do início do plano (' + esc(dBR(c.inicio)) + ')' : 'do vencimento atual'}. Pode mudar.</small><input type="date" id="pnv"></label>` : ''}
     <p class="note" id="pRest">${cy && cy.pago ? `Já pago neste período: ${esc(brl(cy.pago))} de ${esc(brl(c.valor))}.` : ''}</p>
     <div class="err" id="merr" role="alert"></div>
     <div class="foot"><button class="btn g" data-close>Cancelar</button><button class="btn" id="pOk">Registrar pagamento</button></div>`,
     () => {
-      // Pagamento parcial (ex.: entrada): não avança o vencimento até completar o valor do período
+      if (recur) {
+        $('#pnv').value = sug();
+        $('#pd').onchange = () => { if (!c.vence && !c.inicio) $('#pnv').value = sug(); };
+        $('#pa').onchange = () => { $('#pnv').disabled = !$('#pa').checked; };
+      }
+      // Pagamento parcial (ex.: entrada): não mexe no vencimento até completar o valor do período
       const upd = () => { if (!recur || !cy || !cy.falta) return; const v = +$('#pv').value || 0, rest = Math.max(0, cy.falta - v);
-        $('#pa').checked = rest === 0; $('#pRest').textContent = rest ? `Pagamento parcial: depois dele ainda faltam ${brl(rest)} deste período.` : 'Com este pagamento, o período fica quitado.'; };
+        $('#pa').checked = rest === 0; $('#pnv').disabled = rest > 0;
+        $('#pRest').textContent = rest ? `Pagamento parcial: depois dele ainda faltam ${brl(rest)} deste período.` : 'Com este pagamento, o período fica quitado.'; };
       if ($('#pv')) $('#pv').oninput = upd; upd();
-      $('#pOk').onclick = e => run(e.target, () => rpc('painel_pagou', { p_id: c.id, p_valor: $('#pv').value === '' ? null : +$('#pv').value,
-      p_data: $('#pd').value || null, p_avancar: recur ? $('#pa').checked : false }));
+      $('#pOk').onclick = e => {
+        const av = recur && $('#pa').checked;
+        if (av && !$('#pnv').value) { $('#merr').textContent = 'Escolha a data do novo vencimento.'; return; }
+        run(e.target, () => rpc('painel_pagou', { p_id: c.id, p_valor: $('#pv').value === '' ? null : +$('#pv').value,
+          p_data: $('#pd').value || null, p_avancar: av, p_novo_vence: av ? $('#pnv').value : null }));
+      };
     });
   }
+
   if (a === 'block') return modal(`<h3>Bloquear ${esc(c.espaco)}?</h3>
     <p class="note">A pessoa e os vendedores dela param de usar na hora: a extensão mostra "Acesso suspenso" e o link de agendamento sai do ar. Os dados ficam guardados, e você pode liberar quando quiser.</p>
     <div class="err" id="merr" role="alert"></div>
