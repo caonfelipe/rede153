@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel de clientes</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0B0D14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ECEEF3; --card: #FFFFFF; --side: #F6F7FA; --fg: #151926; --muted: #5B6277; --line: #DCDFE8;
+    --accent: #3144CF; --accent-fg: #fff; --accent-soft: #E3E7FF;
+    --ok: #18723F; --ok-soft: #DDF3E6; --warn: #8A5A00; --warn-soft: #FFF0CC; --err: #B42318; --err-soft: #FDE3E0; --gray-soft: #E9EBF1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B0D14; --card: #141824; --side: #10131C; --fg: #E8EAF2; --muted: #9AA1B5; --line: #262B3A;
+      --accent: #6F80FF; --accent-fg: #fff; --accent-soft: #1D2550;
+      --ok: #6FD49B; --ok-soft: #12301F; --warn: #F5C451; --warn-soft: #3A2C08; --err: #FF8F8F; --err-soft: #3D1414; --gray-soft: #1E2230;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
+  button { font: inherit; cursor: pointer; }
+  .btn { display: inline-block; text-decoration: none; background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 8px; padding: 9px 14px; font-weight: 600; font-size: 14px; white-space: nowrap; }
+  .btn.g { background: var(--card); color: var(--fg); border: 1px solid var(--line); }
+  .btn.d { background: var(--card); color: var(--err); border: 1px solid var(--line); }
+  .btn.s { padding: 6px 10px; font-size: 13px; }
+  .btn:disabled { opacity: .6; cursor: progress; }
+  input, select, textarea { font: inherit; color: var(--fg); background: var(--side); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; width: 100%; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+  label { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 600; }
+  label small { font-weight: 400; color: var(--muted); }
+
+  /* login */
+  .login { max-width: 380px; margin: 12vh auto 0; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; }
+  .brand b { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--accent); color: #fff; font-size: 12px; }
+  .err { color: var(--err); font-size: 13.5px; min-height: 1em; }
+
+  /* topo */
+  .top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .top h1 { font-size: 22px; margin: 0; flex: 1; min-width: 180px; }
+  .top .who { color: var(--muted); font-size: 13px; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .kpi span { display: block; color: var(--muted); font-size: 12.5px; font-weight: 500; }
+  .kpi b { display: block; font-size: 26px; font-variant-numeric: tabular-nums; line-height: 1.25; margin-top: 2px; }
+  .kpi.alert b { color: var(--err); }
+
+  /* atenção */
+  .att { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--err); border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; }
+  .att h2 { font-size: 15px; margin: 0 0 10px; }
+  .att .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid var(--line); }
+  .att .row:first-of-type { border-top: 0; padding-top: 0; }
+  .att .row .t { flex: 1; min-width: 200px; }
+  .att .row .t b { display: block; }
+  .att .row .t span { color: var(--muted); font-size: 13.5px; }
+
+  /* filtros */
+  .bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .chip { background: var(--card); border: 1px solid var(--line); color: var(--fg); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 500; }
+  .chip.on { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .chip i { font-style: normal; color: var(--muted); margin-left: 4px; }
+  .chip.on i { color: inherit; opacity: .7; }
+  .bar input { max-width: 240px; margin-left: auto; }
+
+  /* clientes */
+  .list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+  .cli { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .cli.off { opacity: .72; }
+  .cli .h { display: flex; align-items: flex-start; gap: 8px; }
+  .cli .h b { font-size: 16px; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .tag { font-size: 11.5px; font-weight: 600; border-radius: 999px; padding: 2px 9px; white-space: nowrap; background: var(--gray-soft); color: var(--muted); }
+  .tag.teste { background: var(--accent-soft); color: var(--accent); }
+  .tag.mensal, .tag.anual { background: var(--ok-soft); color: var(--ok); }
+  .tag.bloq { background: var(--err-soft); color: var(--err); }
+  .st { font-size: 13.5px; font-weight: 600; border-radius: 8px; padding: 7px 10px; }
+  .st.ok { background: var(--ok-soft); color: var(--ok); }
+  .st.warn { background: var(--warn-soft); color: var(--warn); }
+  .st.err { background: var(--err-soft); color: var(--err); }
+  .st.gray { background: var(--gray-soft); color: var(--muted); }
+  .meta { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; font-size: 13.5px; }
+  .meta dt { color: var(--muted); }
+  .meta dd { margin: 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+  .obs { font-size: 13px; color: var(--muted); background: var(--side); border-radius: 8px; padding: 7px 10px; white-space: pre-line; }
+  .acts { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
+  .empty { color: var(--muted); padding: 24px; text-align: center; background: var(--card); border: 1px dashed var(--line); border-radius: 12px; }
+
+  /* janela */
+  .scrim { position: fixed; inset: 0; background: rgba(5, 8, 20, .5); display: grid; place-items: center; padding: 16px; z-index: 10; }
+  .scrim[hidden] { display: none; }
+  .modal { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; width: 100%; max-width: 480px; max-height: calc(100vh - 32px); overflow: auto; display: flex; flex-direction: column; gap: 12px; }
+  .modal h3 { margin: 0; font-size: 18px; }
+  .modal .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .modal .foot { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; margin-top: 4px; }
+  .quick { display: flex; gap: 6px; flex-wrap: wrap; }
+  .note { font-size: 13px; color: var(--muted); margin: 0; }
+  .hist { font-size: 13px; color: var(--muted); margin: 0; padding-left: 18px; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 500; z-index: 20; max-width: calc(100vw - 32px); }
+  .toast[hidden] { display: none; }
+
+  @media (max-width: 760px) {
+    .kpis { grid-template-columns: 1fr 1fr; }
+    .bar input { max-width: none; margin-left: 0; }
+    .list { grid-template-columns: 1fr; }
+    .modal .two { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="scrim" id="scrim" hidden><div class="modal" id="modal" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const SB = 'https://fdethpkbgdrtaswfyghf.supabase.co', KEY = 'sb_publishable_EoEuDgwAksUiR0uenSU-_w_Xv99EY4h';
+const PLANOS = { teste: 'Teste', mensal: 'Mensal', anual: 'Anual', cortesia: 'Cortesia', proprio: 'Seu espaço' };
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const brl = v => v == null || v === '' ? '' : Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const dBR = d => d ? d.split('-').reverse().join('/') : '';
+const dayNum = d => Date.UTC(+d.slice(0, 4), +d.slice(5, 7) - 1, +d.slice(8, 10)) / 864e5;
+const addDays = (d, n) => new Date((dayNum(d) + n) * 864e5).toISOString().slice(0, 10);
+const addMonths = (d, n) => { const [y, m, dd] = d.split('-').map(Number); const t = new Date(Date.UTC(y, m - 1 + n, 1)); const last = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth() + 1, 0)).getUTCDate(); t.setUTCDate(Math.min(dd, last)); return t.toISOString().slice(0, 10); };
+const ago = t => { if (!t) return 'nunca entrou'; const d = Math.floor((Date.now() - new Date(t)) / 864e5); return d <= 0 ? 'entrou hoje' : d === 1 ? 'entrou ontem' : `entrou há ${d} dias`; };
+const first = n => String(n || '').trim().split(/\s+/)[0] || '';
+
+let session = null, clients = [], hoje = new Date().toISOString().slice(0, 10), filter = 'todos', q = '';
+try { session = JSON.parse(localStorage.getItem('r153-painel') || 'null'); } catch (e) {}
+const saveSession = s => { session = s; try { s ? localStorage.setItem('r153-painel', JSON.stringify(s)) : localStorage.removeItem('r153-painel'); } catch (e) {} };
+
+function toast(t) { const e = $('#toast'); e.textContent = t; e.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => e.hidden = true, 3500); }
+
+// ---------- nuvem ----------
+async function auth(grant, body) {
+  const r = await fetch(`${SB}/auth/v1/token?grant_type=${grant}`, { method: 'POST', headers: { apikey: KEY, 'content-type': 'application/json' }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(/invalid/i.test(j.error_description || j.msg || '') ? 'E-mail ou senha incorretos.' : (j.error_description || j.msg || 'Não consegui entrar.'));
+  return { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: j.expires_at || (Date.now() / 1000 + (j.expires_in || 3600)), email: j.user && j.user.email };
+}
+async function token() {
+  if (!session) throw new Error('login');
+  if (Date.now() / 1000 > session.expires_at - 60) {
+    try { saveSession({ ...(await auth('refresh_token', { refresh_token: session.refresh_token })), email: session.email }); }
+    catch (e) { saveSession(null); throw new Error('login'); }
+  }
+  return session.access_token;
+}
+async function rpc(name, args = {}) {
+  const r = await fetch(`${SB}/rest/v1/rpc/${name}`, { method: 'POST', headers: { apikey: KEY, Authorization: 'Bearer ' + await token(), 'content-type': 'application/json' }, body: JSON.stringify(args) });
+  const j = await r.json().catch(() => null);
+  if (r.status === 401) { saveSession(null); throw new Error('login'); }
+  if (!r.ok) throw new Error((j && (j.message || j.hint)) || 'A nuvem respondeu ' + r.status);
+  return j;
+}
+
+// ---------- situação de cada cliente ----------
+function status(c) {
+  if (!c.ativo) return { cls: 'err', txt: 'Bloqueado' + (c.bloqueado_em ? ' desde ' + new Date(c.bloqueado_em).toLocaleDateString('pt-BR') : ''), rank: 5 };
+  if (c.plano === 'proprio') return { cls: 'gray', txt: 'Seu espaço', rank: 9 };
+  if (c.plano === 'cortesia') return { cls: 'gray', txt: 'Cortesia, sem cobrança', rank: 8 };
+  if (!c.plano) return { cls: 'warn', txt: 'Sem plano definido', rank: 4 };
+  if (!c.vence) return { cls: 'warn', txt: 'Sem data de vencimento', rank: 4 };
+  const d = dayNum(c.vence) - dayNum(hoje), when = dBR(c.vence);
+  const what = c.plano === 'teste' ? 'Teste' : 'Mensalidade';
+  if (d < 0) return { cls: 'err', txt: `${c.plano === 'teste' ? 'Teste acabou' : 'Venceu'} há ${-d} dia${d === -1 ? '' : 's'} (${when})`, rank: 0, alert: true, d };
+  if (d === 0) return { cls: 'err', txt: `${c.plano === 'teste' ? 'Teste acaba' : 'Vence'} hoje (${when})`, rank: 1, alert: true, d };
+  if (d <= 3) return { cls: 'warn', txt: `${what} ${c.plano === 'teste' ? 'acaba' : 'vence'} em ${d} dia${d === 1 ? '' : 's'} (${when})`, rank: 2, alert: true, d };
+  return { cls: 'ok', txt: `${c.plano === 'teste' ? 'Teste até' : 'Pago até'} ${when} (${d} dias)`, rank: 3, d };
+}
+function cobranca(c) {
+  const s = status(c), n = first(c.espaco), when = dBR(c.vence);
+  if (c.plano === 'teste') return s.d < 0
+    ? `Oi, ${n}! Seu período de teste da Rede 153 terminou em ${when}. Gostou? Quer continuar usando? Me fala que eu te passo como fica.`
+    : `Oi, ${n}! Seu período de teste da Rede 153 termina em ${when}. O que está achando? Quer continuar usando depois do teste?`;
+  return s.d < 0
+    ? `Oi, ${n}! Tudo bem? A mensalidade da Rede 153 venceu em ${when} e ainda não identifiquei o pagamento. Consegue verificar para mim?`
+    : `Oi, ${n}! Passando para lembrar que a mensalidade da Rede 153 vence em ${when}${c.valor ? ', no valor de ' + brl(c.valor) : ''}. Qualquer dúvida, me chama!`;
+}
+const waLink = c => c.whats ? `https://wa.me/${c.whats.length <= 11 ? '55' + c.whats : c.whats}?text=${encodeURIComponent(cobranca(c))}` : '';
+
+// ---------- telas ----------
+function renderLogin(msg) {
+  $('#app').innerHTML = `<form class="login" id="lf">
+    <div class="brand"><b>153</b>Painel de clientes</div>
+    <label>E-mail<input type="email" id="le" autocomplete="username" required value="${esc(session && session.email || '')}"></label>
+    <label>Senha<input type="password" id="lp" autocomplete="current-password" required></label>
+    <div class="err" id="lerr" role="alert">${esc(msg || '')}</div>
+    <button class="btn" type="submit">Entrar</button>
+    <p class="note">Use o mesmo login da extensão Rede 153.</p>
+  </form>`;
+  $('#lf').onsubmit = async e => {
+    e.preventDefault();
+    const b = e.target.querySelector('button'); b.disabled = true; b.textContent = 'Entrando...';
+    try { saveSession(await auth('password', { email: $('#le').value.trim(), password: $('#lp').value })); await load(); }
+    catch (err) { b.disabled = false; b.textContent = 'Entrar'; $('#lerr').textContent = err.message; }
+  };
+}
+
+async function load() {
+  try {
+    clients = await rpc('painel_clientes');
+    if (clients[0] && clients[0].hoje) hoje = clients[0].hoje;
+    render();
+  } catch (e) {
+    if (e.message === 'login') return renderLogin();
+    if (/Acesso negado/.test(e.message)) { saveSession(null); return renderLogin('Este login não tem acesso ao painel.'); }
+    $('#app').innerHTML = `<div class="empty">Não consegui carregar: ${esc(e.message)}<br><br><button class="btn" id="retry">Tentar de novo</button></div>`;
+    $('#retry').onclick = load;
+  }
+}
+
+function render() {
+  const cl = clients.filter(c => c.plano !== 'proprio');
+  const ativos = cl.filter(c => c.ativo);
+  const alertas = cl.filter(c => c.ativo && status(c).alert).sort((a, b) => status(a).d - status(b).d);
+  const semPlano = cl.filter(c => c.ativo && (!c.plano || (c.plano !== 'cortesia' && !c.vence)));
+  const receita = ativos.reduce((s, c) => s + (c.plano === 'mensal' ? +c.valor || 0 : c.plano === 'anual' ? (+c.valor || 0) / 12 : 0), 0);
+  const counts = { todos: clients.length, teste: 0, mensal: 0, anual: 0, cortesia: 0, sem: 0, bloq: 0 };
+  for (const c of clients) { if (!c.ativo) counts.bloq++; if (c.plano && counts[c.plano] != null) counts[c.plano]++; if (!c.plano) counts.sem++; }
+  const match = c => (filter === 'todos' || (filter === 'bloq' ? !c.ativo : filter === 'sem' ? !c.plano : c.plano === filter))
+    && (!q || (c.espaco + ' ' + c.logins.map(l => l.email).join(' ')).toLowerCase().includes(q.toLowerCase()));
+  const shown = clients.filter(match).sort((a, b) => status(a).rank - status(b).rank || a.espaco.localeCompare(b.espaco));
+
+  $('#app').innerHTML = `
+    <div class="top">
+      <h1>Painel de clientes</h1>
+      <span class="who">${esc(session.email || '')}</span>
+      <button class="btn g" id="bRefresh">Atualizar</button>
+      <button class="btn" id="bNew">Novo cliente</button>
+      <button class="btn g" id="bOut">Sair</button>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><span>Clientes ativos</span><b>${ativos.length}</b></div>
+      <div class="kpi"><span>Em teste</span><b>${ativos.filter(c => c.plano === 'teste').length}</b></div>
+      <div class="kpi${alertas.length ? ' alert' : ''}"><span>Para cobrar ou decidir</span><b>${alertas.length}</b></div>
+      <div class="kpi"><span>Receita mensal</span><b>${esc(brl(receita))}</b></div>
+    </div>
+    ${alertas.length ? `<section class="att"><h2>Precisa de atenção</h2>${alertas.map(c => `<div class="row">
+      <div class="t"><b>${esc(c.espaco)}</b><span>${esc(status(c).txt)}${c.valor ? ' · ' + esc(brl(c.valor)) : ''}</span></div>
+      ${c.whats ? `<a class="btn g s" href="${esc(waLink(c))}" target="_blank" rel="noopener">Cobrar no WhatsApp</a>` : `<button class="btn g s" data-a="msg" data-id="${c.id}">Copiar mensagem</button>`}
+      ${c.plano === 'teste' ? `<button class="btn s" data-a="edit" data-id="${c.id}">Virou cliente</button>` : `<button class="btn s" data-a="pay" data-id="${c.id}">Recebi o pagamento</button>`}
+      <button class="btn d s" data-a="block" data-id="${c.id}">Bloquear</button>
+    </div>`).join('')}</section>` : ''}
+    ${semPlano.length ? `<p class="note" style="margin:-8px 0 16px">${semPlano.length} cliente${semPlano.length > 1 ? 's' : ''} sem plano ou sem vencimento: ${semPlano.map(c => esc(c.espaco)).join(', ')}. Clique em Editar para completar.</p>` : ''}
+    <div class="bar">
+      ${[['todos', 'Todos'], ['teste', 'Teste'], ['mensal', 'Mensal'], ['anual', 'Anual'], ['cortesia', 'Cortesia'], ['sem', 'Sem plano'], ['bloq', 'Bloqueados']]
+        .filter(([k]) => k === 'todos' || counts[k]).map(([k, t]) => `<button class="chip${filter === k ? ' on' : ''}" data-f="${k}">${t}<i>${counts[k]}</i></button>`).join('')}
+      <input type="search" id="q" placeholder="Buscar nome ou e-mail" value="${esc(q)}">
+    </div>
+    <div class="list">${shown.length ? shown.map(card).join('') : '<div class="empty">Nenhum cliente neste filtro.</div>'}</div>`;
+
+  $('#bRefresh').onclick = async e => { e.target.disabled = true; await load(); toast('Atualizado'); };
+  $('#bNew').onclick = openNew;
+  $('#bOut').onclick = () => { saveSession(null); renderLogin(); };
+  document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { filter = b.dataset.f; render(); });
+  $('#q').oninput = e => { q = e.target.value; const pos = e.target.selectionStart; render(); const i = $('#q'); i.focus(); i.setSelectionRange(pos, pos); };
+  document.querySelectorAll('[data-a]').forEach(b => b.onclick = () => act(b.dataset.a, clients.find(c => c.id === b.dataset.id), b));
+}
+
+function card(c) {
+  const s = status(c), pg = c.pagamentos && c.pagamentos[0];
+  return `<article class="cli${c.ativo ? '' : ' off'}">
+    <div class="h"><b>${esc(c.espaco)}</b>${c.ativo ? '' : '<span class="tag bloq">Bloqueado</span>'}<span class="tag ${esc(c.plano || '')}">${esc(PLANOS[c.plano] || 'Sem plano')}</span></div>
+    <div class="st ${s.cls}">${esc(s.txt)}</div>
+    <dl class="meta">
+      ${c.logins.map(l => `<dt>${l.papel === 'owner' ? 'Login' : 'Vendedor'}</dt><dd>${esc(l.email)} · ${esc(ago(l.ultimo_acesso))}</dd>`).join('')}
+      <dt>Leads</dt><dd>${Number(c.leads).toLocaleString('pt-BR')}</dd>
+      ${c.valor != null ? `<dt>Valor</dt><dd>${esc(brl(c.valor))}${c.plano === 'anual' ? ' por ano' : c.plano === 'mensal' ? ' por mês' : ''}</dd>` : ''}
+      ${c.inicio ? `<dt>Início</dt><dd>${esc(dBR(c.inicio))}</dd>` : ''}
+      ${pg ? `<dt>Último pag.</dt><dd>${esc(dBR(pg.pago_em))}${pg.valor != null ? ' · ' + esc(brl(pg.valor)) : ''}</dd>` : ''}
+      ${c.whats ? `<dt>WhatsApp</dt><dd>${esc(c.whats)}</dd>` : ''}
+    </dl>
+    ${c.obs ? `<div class="obs">${esc(c.obs)}</div>` : ''}
+    <div class="acts">
+      <button class="btn g s" data-a="edit" data-id="${c.id}">Editar</button>
+      ${c.plano === 'mensal' || c.plano === 'anual' ? `<button class="btn g s" data-a="pay" data-id="${c.id}">Recebi o pagamento</button>` : ''}
+      ${c.plano !== 'proprio' ? (c.ativo ? `<button class="btn d s" data-a="block" data-id="${c.id}">Bloquear</button>` : `<button class="btn s" data-a="unblock" data-id="${c.id}">Liberar</button>`) : ''}
+    </div>
+  </article>`;
+}
+
+// ---------- ações ----------
+function modal(html, bind) {
+  $('#modal').innerHTML = html; $('#scrim').hidden = false;
+  const f = $('#modal').querySelector('input,select,textarea'); if (f) f.focus();
+  $('#modal').querySelectorAll('[data-close]').forEach(b => b.onclick = closeModal);
+  bind && bind();
+}
+function closeModal() { $('#scrim').hidden = true; $('#modal').innerHTML = ''; }
+$('#scrim').onclick = e => { if (e.target.id === 'scrim') closeModal(); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#scrim').hidden) closeModal(); });
+
+async function run(btn, fn) {
+  const t = btn.textContent; btn.disabled = true; btn.textContent = 'Salvando...';
+  try { const r = await fn(); closeModal(); toast(r || 'Pronto'); await load(); }
+  catch (e) { btn.disabled = false; btn.textContent = t; const er = $('#merr'); if (er) er.textContent = e.message === 'login' ? 'Sua sessão expirou. Entre de novo.' : e.message; else toast(e.message); }
+}
+
+async function act(a, c, btn) {
+  if (!c) return;
+  if (a === 'edit') return openEdit(c);
+  if (a === 'msg') { try { await navigator.clipboard.writeText(cobranca(c)); toast('Mensagem copiada. Cadastre o WhatsApp em Editar para abrir direto.'); } catch (e) { prompt('Copie a mensagem:', cobranca(c)); } return; }
+  if (a === 'pay') return modal(`<h3>Recebi o pagamento</h3>
+    <p class="note"><b>${esc(c.espaco)}</b>, plano ${esc(PLANOS[c.plano].toLowerCase())}. O vencimento passa de ${esc(dBR(c.vence) || 'hoje')} para <b>${esc(dBR(addMonths(c.vence || hoje, c.plano === 'anual' ? 12 : 1)))}</b>${c.ativo ? '' : ' e o acesso é liberado'}.</p>
+    <label>Valor recebido<input type="number" step="0.01" min="0" id="pv" value="${esc(c.valor ?? '')}"></label>
+    <div class="err" id="merr" role="alert"></div>
+    <div class="foot"><button class="btn g" data-close>Cancelar</button><button class="btn" id="pOk">Registrar pagamento</button></div>`,
+    () => $('#pOk').onclick = e => run(e.target, () => rpc('painel_pagou', { p_id: c.id, p_valor: $('#pv').value === '' ? null : +$('#pv').value })));
+  if (a === 'block') return modal(`<h3>Bloquear ${esc(c.espaco)}?</h3>
+    <p class="note">A pessoa e os vendedores dela param de usar na hora: a extensão mostra "Acesso suspenso" e o link de agendamento sai do ar. Os dados ficam guardados, e você pode liberar quando quiser.</p>
+    <div class="err" id="merr" role="alert"></div>
+    <div class="foot"><button class="btn g" data-close>Cancelar</button><button class="btn" style="background:var(--err)" id="bOk">Bloquear</button></div>`,
+    () => $('#bOk').onclick = e => run(e.target, () => rpc('painel_acesso', { p_id: c.id, p_ativo: false })));
+  if (a === 'unblock') { btn.disabled = true; try { toast(await rpc('painel_acesso', { p_id: c.id, p_ativo: true })); await load(); } catch (e) { btn.disabled = false; toast(e.message); } }
+}
+
+function planFields(c) {
+  return `<div class="two">
+      <label>Plano<select id="ePlano">${['', 'teste', 'mensal', 'anual', 'cortesia', 'proprio'].map(p => `<option value="${p}"${(c.plano || '') === p ? ' selected' : ''}>${p ? PLANOS[p] : 'Sem plano'}</option>`).join('')}</select></label>
+      <label>Valor (R$)<input type="number" step="0.01" min="0" id="eValor" value="${esc(c.valor ?? '')}" placeholder="Ex.: 297"></label>
+    </div>
+    <label>Válido até<small>Fim do teste ou próximo vencimento. Você recebe o aviso 3 dias antes.</small><input type="date" id="eVence" value="${esc(c.vence || '')}"></label>
+    <div class="quick"><button class="btn g s" type="button" data-q="d7">Hoje + 7 dias</button><button class="btn g s" type="button" data-q="m1">Hoje + 1 mês</button><button class="btn g s" type="button" data-q="y1">Hoje + 1 ano</button></div>
+    <label>WhatsApp<small>Para o botão "Cobrar no WhatsApp". Com DDD.</small><input type="tel" id="eWhats" value="${esc(c.whats || '')}" placeholder="(48) 99999-9999"></label>`;
+}
+function bindQuick() {
+  $('#modal').querySelectorAll('[data-q]').forEach(b => b.onclick = () => {
+    $('#eVence').value = b.dataset.q === 'd7' ? addDays(hoje, 7) : addMonths(hoje, b.dataset.q === 'y1' ? 12 : 1);
+  });
+}
+
+function openEdit(c) {
+  const pg = c.pagamentos || [];
+  modal(`<h3>${esc(c.espaco)}</h3>
+    <label>Nome do cliente<input id="eNome" value="${esc(c.espaco)}"></label>
+    ${planFields(c)}
+    <label>Início<input type="date" id="eInicio" value="${esc(c.inicio || '')}"></label>
+    <label>Anotações<textarea id="eObs" rows="3" placeholder="Ex.: paga por Pix todo dia 10">${esc(c.obs || '')}</textarea></label>
+    ${pg.length ? `<div><p class="note" style="font-weight:600;color:var(--fg)">Pagamentos recebidos</p><ul class="hist">${pg.slice(0, 12).map(p => `<li>${esc(dBR(p.pago_em))}${p.valor != null ? ' · ' + esc(brl(p.valor)) : ''}</li>`).join('')}</ul></div>` : ''}
+    <div class="err" id="merr" role="alert"></div>
+    <div class="foot"><button class="btn g" data-close>Cancelar</button><button class="btn" id="eOk">Salvar</button></div>`,
+    () => {
+      bindQuick();
+      $('#eOk').onclick = e => run(e.target, () => rpc('painel_salvar', {
+        p_id: c.id, p_nome: $('#eNome').value, p_plano: $('#ePlano').value, p_valor: $('#eValor').value === '' ? null : +$('#eValor').value,
+        p_inicio: $('#eInicio').value || null, p_vence: $('#eVence').value || null, p_whats: $('#eWhats').value, p_obs: $('#eObs').value }));
+    });
+}
+
+function openNew() {
+  modal(`<h3>Novo cliente</h3>
+    <p class="note">Antes, crie o login da pessoa no Supabase, em <b>Authentication &gt; Users &gt; Add user</b>. Aqui você cria o espaço dela e define o plano.</p>
+    <label>E-mail do login<input type="email" id="nEmail" placeholder="cliente@email.com"></label>
+    <label>Nome do cliente<input id="eNome" placeholder="Ex.: Ana Flavia"></label>
+    ${planFields({ plano: 'teste', vence: addDays(hoje, 7) })}
+    <div class="err" id="merr" role="alert"></div>
+    <div class="foot"><button class="btn g" data-close>Cancelar</button><button class="btn" id="nOk">Criar cliente</button></div>`,
+    () => {
+      bindQuick();
+      $('#nOk').onclick = e => {
+        if (!$('#nEmail').value.trim() || !$('#eNome').value.trim()) { $('#merr').textContent = 'Preencha o e-mail e o nome.'; return; }
+        run(e.target, () => rpc('painel_novo', { p_email: $('#nEmail').value, p_nome: $('#eNome').value, p_plano: $('#ePlano').value,
+          p_valor: $('#eValor').value === '' ? null : +$('#eValor').value, p_vence: $('#eVence').value || null, p_whats: $('#eWhats').value }));
+      };
+    });
+}
+
+session ? load() : renderLogin();
+</script>
+</body>
+</html>
